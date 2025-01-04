@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Platforms>x64</Platforms>
-    <AssemblyName>Plugin.DNS.AWSRoute53</AssemblyName>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="AWSSDK.Route53" Version="3.7.3.26" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Platforms>x64</Platforms>
+		<AssemblyName>Plugin.DNS.AWSRoute53</AssemblyName>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Certify.Models\Certify.Models.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AWSSDK.Route53" Version="3.7.403.29" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Certify.Models\Certify.Models.csproj" />
+	</ItemGroup>
 </Project>
