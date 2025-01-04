@@ -30,12 +30,31 @@ namespace Certify.Models
 
     public class RenewalSettings
     {
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
+        public DateTimeOffset? EndDate { get; set; }
         public RenewalMode Mode { get; set; }
 
-        public bool IsPreviewMode { get; set; } = false;
+        public bool IsPreviewMode { get; set; }
 
-        public List<string> TargetManagedCertificates { get; set; }
+        public List<string> TargetManagedCertificates { get; set; } = new();
+
+        public bool AwaitResults { get; set; } = true;
+    }
+    public class RenewalPrefs
+    {
+        public int RenewalIntervalDays { get; set; }
+        public string RenewalIntervalMode { get; set; } = string.Empty;
+        public int MaxRenewalRequests { get; set; }
+        public bool IncludeStoppedSites { get; set; }
+
+        /// <summary>
+        ///  If true, don't send status UI messages for skipped items (items not due for renewal)
+        /// </summary>
+        public bool SuppressSkippedItems { get; set; }
+
+        /// <summary>
+        /// If true, perform batches of items in parallel
+        /// </summary>
+        public bool PerformParallelRenewals { get; set; }
     }
 }

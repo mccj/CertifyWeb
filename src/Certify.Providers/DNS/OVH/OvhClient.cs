@@ -126,6 +126,7 @@ namespace Certify.Providers.DNS.OVH
                 _timeDelta = await ComputeTimeDelta();
                 _isTimeDeltaInitialized = true;
             }
+
             return _timeDelta;
 
         }
@@ -407,7 +408,6 @@ namespace Certify.Providers.DNS.OVH
 
         #endregion
 
-
         /// <summary>
         /// Lowest level call helper. If "consumerKey" is not "null", inject
         /// authentication headers and sign the request.
@@ -432,6 +432,7 @@ namespace Certify.Providers.DNS.OVH
             {
                 path = path.Substring(1);
             }
+
             var target = Endpoint + path;
             var headers = new WebHeaderCollection();
             headers.Add("X-Ovh-Application", ApplicationKey);
@@ -480,6 +481,7 @@ namespace Certify.Providers.DNS.OVH
             {
                 response = await _webClient.DownloadStringTaskAsync(path);
             }
+
             return response;
         }
 
@@ -494,7 +496,6 @@ namespace Certify.Providers.DNS.OVH
             return JsonConvert.DeserializeObject<T>(await Call(method, path, JsonConvert.SerializeObject(data), needAuth));
         }
 
-
         private async Task<long> ComputeTimeDelta()
         {
             var serverUnixTimestamp = await Get<long>("/auth/time", null, false);
@@ -507,5 +508,4 @@ namespace Certify.Providers.DNS.OVH
             return (long)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         }
     }
-
 }

@@ -8,6 +8,7 @@ using Certify.Models;
 using Certify.Models.Config;
 using Certify.Models.Plugins;
 using Certify.Models.Providers;
+using Certify.Plugins;
 using Newtonsoft.Json;
 
 namespace Certify.Providers.DNS.AcmeDns
@@ -23,15 +24,11 @@ namespace Certify.Providers.DNS.AcmeDns
         public string password { get; set; }
         public string username { get; set; }
         public string subject { get; set; }
-
     }
 
     internal class AcmeDnsUpdate
     {
         public string txt { get; set; }
-
-        // length of time to wait before checking challenge response, non-standard and used by CertifyDns in some cases
-        public int? propagationDelaySeconds { get; set; }
     }
 
 #pragma warning restore IDE1006 // Naming Styles
@@ -45,11 +42,6 @@ namespace Certify.Providers.DNS.AcmeDns
         private ILog _log;
 
         private int? _customPropagationDelay = null;
-
-        /// <summary>
-        /// if true, enable extensions to the base standard
-        /// </summary>
-        public bool EnableExtensions = false;
 
         public int PropagationDelaySeconds => (_customPropagationDelay != null ? (int)_customPropagationDelay : Definition.PropagationDelaySeconds);
 
@@ -78,7 +70,8 @@ namespace Certify.Providers.DNS.AcmeDns
                     PropagationDelaySeconds = 5,
                     ProviderParameters = new List<ProviderParameter>{
                         new ProviderParameter{ Key="api",Name="API Url", IsRequired=true, IsCredential=false, IsPassword=false, Value="https://auth.acme-dns.io", Description="Self hosted API is recommended: https://github.com/joohoi/acme-dns" },
-                        new ProviderParameter{ Key="allowfrom",Name="Optional Allow From IPs", IsCredential=false, IsRequired=false, IsPassword=false,  Description="e.g.  192.168.100.1/24; 1.2.3.4/32; 2002:c0a8:2a00::0/40" }
+                        new ProviderParameter{ Key="allowfrom",Name="Optional Allow From IPs", IsCredential=false, IsRequired=false, IsPassword=false,  Description="e.g.  192.168.100.1/24; 1.2.3.4/32; 2002:c0a8:2a00::0/40" },
+                        new ProviderParameter{ Key="credentials_json",Name="Optional credentials JSON", IsCredential=false, IsRequired=false, IsPassword=false, Type=OptionType.MultiLineText,  Description="(optional) Only used if already registered or service supports pre-registering." }
                     },
                     ChallengeType = SupportedChallengeTypes.CHALLENGE_TYPE_DNS,
                     Config = "Provider=Certify.Providers.DNS.AcmeDns",
@@ -94,10 +87,10 @@ namespace Certify.Providers.DNS.AcmeDns
         private JsonSerializerSettings _serializerSettings;
 
         private string _settingsPath { get; set; }
-
+        private Uri _apiBaseUri { get; set; }
         public DnsProviderAcmeDns()
         {
-            _settingsPath = EnvironmentUtil.GetAppDataFolder();
+            _settingsPath = EnvironmentUtil.CreateAppDataPath();
 
             _client = new HttpClient();
             _client.DefaultRequestHeaders.Add("User-Agent", "Certify/DnsProviderAcmeDns");
@@ -111,21 +104,20 @@ namespace Certify.Providers.DNS.AcmeDns
 
         }
 
-        private async Task<ValueTuple<AcmeDnsRegistration, bool>> Register(string settingsPath, string domainId)
+        private string _settingsStoreName { get; set; } = "acmedns";
+
+        /// <summary>
+        /// Checks for and loads an existing registration settings file and also returns the computed settings path used.
+        /// </summary>
+        /// <param name="storeName"></param>
+        /// <param name="settingsPath"></param>
+        /// <param name="domainId"></param>
+        /// <param name="apiPrefix"></param>
+        /// <param name="ensureSuffix"></param>
+        /// <returns></returns>
+        private (AcmeDnsRegistration registration, bool isNewRegistration, string fullSettingsPath) EnsureExistingRegistration(string storeName, string settingsPath, string domainId, string apiPrefix, string ensureSuffix = null)
         {
-
-            var apiPrefix = "";
-
-            if (_parameters["api"] != null)
-            {
-                _client.BaseAddress = new System.Uri(_parameters["api"]);
-
-                // we prefix the settings file with the encoded API url as these settings are 
-                // only useful on the target API, changing the api should change all settings
-                apiPrefix = ToUrlSafeBase64String(_client.BaseAddress.Host);
-            }
-
-            var registrationSettingsPath = Path.Combine(settingsPath, "acmedns");
+            var registrationSettingsPath = Path.Combine(settingsPath, storeName);
 
             if (!System.IO.Directory.Exists(registrationSettingsPath))
             {
@@ -148,15 +140,87 @@ namespace Certify.Providers.DNS.AcmeDns
                 // registration exists
                 var reg = JsonConvert.DeserializeObject<AcmeDnsRegistration>(System.IO.File.ReadAllText(registrationSettingsPath));
 
-                // is an existing registration
-                return (reg, false);
+                if (ensureSuffix == null || reg.fulldomain.EndsWith(ensureSuffix))
+                {
+                    // is an existing registration
+                    return (registration: reg, isNewRegistration: false, fullSettingsPath: registrationSettingsPath);
+                }
+                else
+                {
+                    // registration is not a valid certify dns registration, must be annother acme-dns service}
+                    _log?.Warning("Existing acme-dns registration found, new registration required for Certify DNS");
+                }
+            }
+
+            // registration config not matched
+            return (registration: null, isNewRegistration: true, fullSettingsPath: registrationSettingsPath);
+        }
+
+        private async Task<(AcmeDnsRegistration registration, bool isNewRegistration)> Register(string settingsPath, string domainId)
+        {
+            var apiPrefix = "";
+
+            if (_parameters.TryGetValue("api", out var apiBase) && !string.IsNullOrWhiteSpace(apiBase))
+            {
+                _apiBaseUri = new System.Uri(apiBase);
+
+                if (!_apiBaseUri.ToString().EndsWith("/"))
+                {
+                    _apiBaseUri = new Uri($"{_apiBaseUri}/");
+                }
+
+                _client.BaseAddress = _apiBaseUri;
+
+                // we prefix the settings file with the encoded API url as these settings are 
+                // only useful on the target API, changing the api should change all settings
+                apiPrefix = ToUrlSafeBase64String(_client.BaseAddress.Host);
+            }
+            else
+            {
+                _log.Error("acme-dns requires a valid API URL.");
+                return (null, false);
+            }
+
+            // optionally load and use an existing registration from provided json
+            if (_parameters.TryGetValue("credentials_json", out var credentialsJson) && !string.IsNullOrWhiteSpace(credentialsJson))
+            {
+                // use an existing registration credentials file
+                try
+                {
+                    var reg = JsonConvert.DeserializeObject<AcmeDnsRegistration>(credentialsJson);
+
+                    if (!string.IsNullOrEmpty(reg.fulldomain))
+                    {
+                        return (registration: reg, isNewRegistration: false);
+                    }
+                    else
+                    {
+                        _log.Error("Credentials JSON does not appear to be valid.");
+                    }
+                }
+                catch
+                {
+                    _log.Error("Failed to parse credentials JSON. Leave the Credentials JSON blank if not known/required.");
+                    _log?.Information("acme-dns API registration failed.");
+
+                    return (null, false);
+                }
+            }
+
+            _settingsStoreName = "acmedns";
+            var registrationCheck = EnsureExistingRegistration(_settingsStoreName, settingsPath, domainId, apiPrefix);
+
+            // return existing if any
+            if (registrationCheck.registration != null)
+            {
+                return (registration: registrationCheck.registration, isNewRegistration: registrationCheck.isNewRegistration);
             }
 
             var registration = new AcmeDns.AcmeDnsRegistration();
 
-            if (_parameters.ContainsKey("allowfrom") && _parameters["allowfrom"] != null)
+            if (_parameters.TryGetValue("allowfrom", out var allowFrom) && !string.IsNullOrWhiteSpace(allowFrom))
             {
-                var rules = _parameters["allowfrom"].Split(';');
+                var rules = allowFrom.Split(';');
                 registration.allowfrom = new List<string>();
                 foreach (var r in rules)
                 {
@@ -164,21 +228,15 @@ namespace Certify.Providers.DNS.AcmeDns
                 }
             }
 
-            if (EnableExtensions)
-            {
-                registration.subject = domainId;
-            }
-
             var json = JsonConvert.SerializeObject(registration, _serializerSettings);
 
-            var req = new HttpRequestMessage(HttpMethod.Post, "/register");
+            var req = new HttpRequestMessage(HttpMethod.Post, $"{_apiBaseUri}register");
 
             if (_credentials?.ContainsKey("user") == true && _credentials?.ContainsKey("key") == true)
             {
                 var basicCredentials = "Basic " + ToUrlSafeBase64String(_credentials["user"] + ":" + _credentials["key"]);
                 req.Headers.Add("Authorization", basicCredentials);
             }
-
 
             req.Content = new StringContent(json);
 
@@ -188,10 +246,12 @@ namespace Certify.Providers.DNS.AcmeDns
             {
                 // got new registration
                 var responseJson = await response.Content.ReadAsStringAsync();
-                registration = JsonConvert.DeserializeObject<AcmeDns.AcmeDnsRegistration>(responseJson);
+                registration = JsonConvert.DeserializeObject<AcmeDnsRegistration>(responseJson);
 
                 // save these settings for later
-                System.IO.File.WriteAllText(registrationSettingsPath, JsonConvert.SerializeObject(registration));
+                System.IO.File.WriteAllText(registrationCheck.fullSettingsPath, JsonConvert.SerializeObject(registration));
+
+                _log?.Information("API registration completed");
 
                 // is a new registration
                 return (registration, true);
@@ -199,6 +259,8 @@ namespace Certify.Providers.DNS.AcmeDns
             else
             {
                 // failed to register
+                _log?.Information("API registration failed");
+
                 return (null, false);
             }
         }
@@ -228,7 +290,7 @@ namespace Certify.Providers.DNS.AcmeDns
                 };
             }
 
-            var req = new HttpRequestMessage(HttpMethod.Post, "/update");
+            var req = new HttpRequestMessage(HttpMethod.Post, $"{_apiBaseUri}update");
             req.Headers.Add("X-Api-User", registration.username);
             req.Headers.Add("X-Api-Key", registration.password);
 
@@ -251,17 +313,11 @@ namespace Certify.Providers.DNS.AcmeDns
                     var responseJson = await result.Content.ReadAsStringAsync();
                     var updateResult = JsonConvert.DeserializeObject<AcmeDnsUpdate>(responseJson);
 
-                    if (updateResult.propagationDelaySeconds != null)
-                    {
-                        // some variants (CertifyDns) may provide a preferred propagation delay time which can vary.
-                        _customPropagationDelay = updateResult.propagationDelaySeconds;
-                    }
-
                     return new ActionResult { IsSuccess = true, Message = $"Updated: {request.RecordName} :: {registration.fulldomain}" };
                 }
                 else
                 {
-                    return new ActionResult { IsSuccess = false, Message = $"Update failed: Ensure the {request.RecordName} CNAME points to {registration.fulldomain}" };
+                    return new ActionResult { IsSuccess = false, Message = $"Update failed with status {result.StatusCode} acme-dns API credentials may be invalid. Ensure the {request.RecordName} CNAME points to {registration.fulldomain}" };
                 }
             }
             catch (Exception exp)
@@ -273,7 +329,7 @@ namespace Certify.Providers.DNS.AcmeDns
         public async Task<ActionResult> DeleteRecord(DnsRecord request)
         {
             return await Task.FromResult(
-                new ActionResult { IsSuccess = true, Message = $"Dns Record Delete skipped (acme-dns): {request.RecordName}" }
+                new ActionResult { IsSuccess = true, Message = $"Dns Record Delete skipped (not applicable): {request.RecordName}" }
                 );
         }
 
@@ -291,7 +347,7 @@ namespace Certify.Providers.DNS.AcmeDns
 
             if (parameters?.ContainsKey("propagationdelay") == true)
             {
-                if (int.TryParse(parameters["propagationdelay"], out int customPropDelay))
+                if (int.TryParse(parameters["propagationdelay"], out var customPropDelay))
                 {
                     _customPropagationDelay = customPropDelay;
                 }

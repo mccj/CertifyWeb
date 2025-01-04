@@ -268,7 +268,7 @@
     <value>Check for Updates..</value>
   </data>
   <data name="AboutControl_Register" xml:space="preserve">
-    <value>Register</value>
+    <value>Purchase License Key..</value>
   </data>
   <data name="AboutControl_EnterKey" xml:space="preserve">
     <value>Enter Key..</value>
@@ -307,10 +307,10 @@
     <value>Check for updates automatically</value>
   </data>
   <data name="Settings_EnableTelemetry" xml:space="preserve">
-    <value>Enable app telemetry (feature usage reporting)</value>
+    <value>Enable App Telemetry (feature usage reporting)</value>
   </data>
   <data name="Settings_EnableProxyApiForDomainConfig" xml:space="preserve">
-    <value>Enable proxy API for domain config checks</value>
+    <value>Enable Proxy API for Domain Config Checks</value>
   </data>
   <data name="Settings_EnableEFS" xml:space="preserve">
     <value>Enable Encrypted File System (EFS) for sensitive files. This option does not work on all versions of Windows.</value>
@@ -319,7 +319,7 @@
     <value>Ignore stopped IIS sites for new certificates and renewals</value>
   </data>
   <data name="Settings_EnableDnsValidation" xml:space="preserve">
-    <value>Enable DNS Validations checks (Resolution, CAA, DNSSEC)</value>
+    <value>Enable DNS Validation Checks (Resolution, CAA, DNSSEC)</value>
   </data>
   <data name="SaveChanges" xml:space="preserve">
     <value>Save Changes</value>
@@ -513,7 +513,7 @@
     <value>Are you sure you want to revoke this certificate?</value>
   </data>
   <data name="MainWindow_TrialLimitationReached" xml:space="preserve">
-    <value>You are using the trial version of this app. Please purchase a registration key to upgrade. See the Register option on the About tab.</value>
+    <value>You are using the evaluation version of this app. Please purchase a registration key to upgrade. See the Register option on the About tab.</value>
   </data>
   <data name="MainWindow_RenewAllConfirm" xml:space="preserve">
     <value>This will renew certificates for all auto-renewed items. Proceed?</value>
@@ -531,7 +531,7 @@
     <value> [Community Edition]</value>
   </data>
   <data name="LanguageAuthor" xml:space="preserve">
-    <value>Certify SSL Manager Contributors （https://certifytheweb.com）</value>
+    <value>Certify Certificate Manager Contributors （https://certifytheweb.com）</value>
   </data>
   <data name="About_LanguageTranslator" xml:space="preserve">
     <value>Current Language Translator: </value>
@@ -582,7 +582,7 @@
     <value>Loading...</value>
   </data>
   <data name="Update_MandatoryUpdateQuit" xml:space="preserve">
-    <value>The current app version is no longer supported. Please update to proceed.</value>
+    <value>The current app version requires an essential update to ensure continued operation. Please update immediately. Close app now?</value>
   </data>
   <data name="ManagedCertificateSettings_BindingNote" xml:space="preserve">
     <value>Note: these setting only apply to new https bindings, existing bindings are only updated with the new certificate. Using a fixed IP for multiple certificates will cause a binding conflict on Windows, use with caution.</value>
@@ -666,6 +666,36 @@
     <value>Your license key has expired or is no longer active.</value>
   </data>
   <data name="ExpiryDateConverter_CertificateExpiredNDaysAgo" xml:space="preserve">
-    <value>Expired {0} Days Ago</value>
+    <value>Expired {0} days ago</value>
+  </data>
+  <data name="ManagedCertificateSettings_DomainsIntro" xml:space="preserve">
+    <value>Select domains from existing hostname bindings on an website or add the domains manually. You can then select Request Certificate above or modify options as required. To specify a custom CSR see the Advanced tab.</value>
+  </data>
+  <data name="Credentials_Intro" xml:space="preserve">
+    <value>Stored credentials are required to make automated calls to APIs and other resources during certificate renewal and deployment. These credentials are protected using the Windows Data Protection APIs and stored on this machine.</value>
+  </data>
+  <data name="ManagedCertificates_Deployment_Intro" xml:space="preserve">
+    <value>  Deployment of your certificate can be automatic or you can perform your own deployment tasks (see the Tasks tab).</value>
+  </data>
+  <data name="ManagedCertificates_Tasks_Intro" xml:space="preserve">
+    <value>Tasks are an optional way to work with your latest certificate or trigger other actions before or after renewal. </value>
+  </data>
+  <data name="ManagedCertificates_Tasks_DeploymentIntro" xml:space="preserve">
+    <value>Deployment Tasks run (in the order shown) after the standard Deployment process has completed (see the Deployment tab). Tasks can be run immediately after the certificate has updated or they can be deferred (to run manually or via a scheduled task etc.). You can also drag tasks to re-order them:</value>
+  </data>
+  <data name="ManagedCertificates_Tasks_PrerequestIntro" xml:space="preserve">
+    <value>You can optionally add any number of tasks to run before the certificate request begins:</value>
+  </data>
+  <data name="ManagedCertificateSettings_CertificateAuthority_Title" xml:space="preserve">
+    <value>Certificate Authority</value>
+  </data>
+  <data name="ManagedCertificateSettings_CertificateAuthority_Intro" xml:space="preserve">
+    <value>Certificate Authorities are the organisations who can issue trusted certificates. You need to register an account under Settings for each (ACME) Certificate Authority you wish to use.</value>
+  </data>
+  <data name="ExpiryDateConverter_CertificateExpiresInNHours" xml:space="preserve">
+    <value>Expires in {0} hours</value>
+  </data>
+  <data name="ExpiryDateConverter_CertificateExpiredNHoursAgo" xml:space="preserve">
+    <value>Expired {0} hours ago</value>
   </data>
 </root>

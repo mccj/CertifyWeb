@@ -19,10 +19,10 @@ namespace Certify.Models
         /// <summary>
         /// change notification provide by fody on compile, not that subclasses shouldn't inherit 
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler AfterPropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public event EventHandler? AfterPropertyChanged;
 
-        private bool _isChangeDetectionPaused = false;
+        private bool _isChangeDetectionPaused;
 
         public void PauseChangeEvents()
         {
@@ -110,6 +110,7 @@ namespace Certify.Models
                         DetachChangeEventHandlers(obj);
                     }
                 }
+
                 if (ccArgs.Action == NotifyCollectionChangedAction.Add)
                 {
                     foreach (var obj in ccArgs.NewItems)
@@ -145,11 +146,21 @@ namespace Certify.Models
         private bool isChanged;
 
         /// <summary>
+        /// If an action/event will have modified IsChanged but the change should be ignored, reset the value without firing events
+        /// </summary>
+        /// <param name="val"></param>
+        public void ResetIsChanged(bool val)
+        {
+            isChanged = val;
+            RaisePropertyChangedEvent(nameof(isChanged));
+        }
+
+        /// <summary>
         /// recursively unsets IsChanged on a BindableBase object, any property on the object of type
         /// BindableBase, and any BindableBase objects nested in ICollection properties
         /// </summary>
         /// <param name="obj"></param>
-        private void UnsetChanged(object obj)
+        private static void UnsetChanged(object obj)
         {
             if (obj is BindableBase bb)
             {
@@ -167,12 +178,14 @@ namespace Certify.Models
                             UnsetChanged(subObj);
                         }
                     }
+
                     if (val is BindableBase bbSub)
                     {
                         UnsetChanged(bbSub);
                     }
                 }
             }
+
             if (obj is ICollection collection)
             {
                 foreach (var subObj in collection)

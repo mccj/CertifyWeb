@@ -7,34 +7,34 @@ namespace Certify.Shared
     /// </summary>
     public class ServerConnection
     {
-        public string Id { get; set; }
-        public string DisplayName { get; set; }
-        public bool UseHTTPS { get; set; } = false;
-        public bool AllowUntrusted { get; set; } = false;
+        public string? Id { get; set; }
+        public string? DisplayName { get; set; } = string.Empty;
+        public bool UseHTTPS { get; set; }
+        public bool AllowUntrusted { get; set; }
 #if DEBUG
         public int Port { get; set; } = 9695;
 #else
         public int Port { get; set; } = 9696;
 #endif
-        public string Host { get; set; } = "localhost";
+        public string Host { get; set; } = Certify.Shared.ServiceConfig.DEFAULT_LOCALHOST;
         public DateTime? DateLastConnected { get; set; }
 
-        public string Mode { get; set; } = "direct";
-        public string Authentication { get; set; } = "default";
-        public string ServerMode { get; set; } = "v1";
-        public bool IsDefault { get; set; } = false;
+        public string? Mode { get; set; } = "direct";
+        public string? Authentication { get; set; } = "default";
+        public string? ServerMode { get; set; } = "v1";
+        public bool IsDefault { get; set; }
 
         public ServerConnection()
         {
-
+            Id = Guid.NewGuid().ToString();
         }
 
         public ServerConnection(ServiceConfig config)
         {
             Id = Guid.NewGuid().ToString();
-            UseHTTPS = config.UseHTTPS;
-            Host = config.Host;
-            Port = config.Port;
+            UseHTTPS = config?.UseHTTPS ?? false;
+            Host = config?.Host ?? Certify.Shared.ServiceConfig.DEFAULT_LOCALHOST;
+            Port = config?.Port ?? 9696;
             DisplayName = "(local)";
             Mode = "direct";
             Authentication = "default";

@@ -9,6 +9,7 @@ using Certify.Models;
 using Certify.Models.Config;
 using Certify.Models.Plugins;
 using Certify.Models.Providers;
+using Certify.Plugins;
 
 // ReSharper disable once CheckNamespace
 namespace Certify.Providers.DNS.NameCheap
@@ -45,8 +46,8 @@ namespace Certify.Providers.DNS.NameCheap
             Definition = new ChallengeProviderDefinition
             {
                 Id = "DNS01.API.NameCheap",
-                Title = "NameCheap DNS API (Deprecated)",
-                Description = "Validates via NameCheap APIs",
+                Title = "NameCheap DNS API (Deprecated - Use Posh-ACME version instead)",
+                Description = "Validates via NameCheap APIs. This provider is deprecated and you should switch to the Posh-ACME version.",
                 HelpUrl = "https://www.namecheap.com/support/api/intro/",
                 PropagationDelaySeconds = 120,
 
@@ -98,7 +99,7 @@ namespace Certify.Providers.DNS.NameCheap
 
             if (parameters?.ContainsKey("propagationdelay") == true)
             {
-                if (int.TryParse(parameters["propagationdelay"], out int customPropDelay))
+                if (int.TryParse(parameters["propagationdelay"], out var customPropDelay))
                 {
                     _customPropagationDelay = customPropDelay;
                 }

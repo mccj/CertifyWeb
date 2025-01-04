@@ -7,6 +7,9 @@
             Active,
             Expired,
             Revoked,
+            TryLater,
+            OcspNotSupported,
+            InvalidCertId,
             Unknown
         }
     }

@@ -12,8 +12,8 @@
             ErrorCode = errorCode;
         }
 
-        public bool IsValid { get; set; } = false;
-        public string Message { get; set; }
+        public bool IsValid { get; set; }
+        public string Message { get; set; } = string.Empty;
 
         /// <summary>
         /// Can optionally be used to pass back a custom error code to indicate the error type encountered.

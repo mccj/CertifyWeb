@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.1</TargetFramework>
-		<Platforms>x64</Platforms>
 		<AssemblyName>Plugin.DNS.IONOS</AssemblyName>
 	</PropertyGroup>
 

@@ -8,10 +8,11 @@ using Certify.Models;
 using Certify.Models.Config;
 using Certify.Models.Plugins;
 using Certify.Models.Providers;
+using Certify.Plugins;
 using Newtonsoft.Json;
 
 /// <summary>
-/// Certify DNS is based on the ACME DNS provider with some extensions including credentials
+/// Certify DNS is based on the ACME DNS provider with some extensions including credentials. Shares implementation with the ACME DNS plugin.
 /// </summary>
 namespace Certify.Providers.DNS.CertifyDns
 {
@@ -25,7 +26,6 @@ namespace Certify.Providers.DNS.CertifyDns
         public string password { get; set; }
         public string username { get; set; }
         public string subject { get; set; }
-
     }
 
     internal class AcmeDnsUpdate
@@ -69,9 +69,9 @@ namespace Certify.Providers.DNS.CertifyDns
 
         public DnsProviderCertifyDns() : base()
         {
-            this.EnableExtensions = true;
+            EnableExtensions = true;
 
-            _settingsPath = EnvironmentUtil.GetAppDataFolder();
+            _settingsPath = EnvironmentUtil.CreateAppDataPath();
 
             _client = new HttpClient();
             _client.DefaultRequestHeaders.Add("User-Agent", "Certify/DnsProviderCertifyDns");
@@ -83,7 +83,6 @@ namespace Certify.Providers.DNS.CertifyDns
                 NullValueHandling = NullValueHandling.Ignore
             };
         }
-
 
         private Dictionary<string, string> _credentials;
 
@@ -110,7 +109,6 @@ namespace Certify.Providers.DNS.CertifyDns
 
         public List<ProviderParameter> ProviderParameters => Definition.ProviderParameters;
 
-
         private HttpClient _client;
 
         private Dictionary<string, string> _parameters = new Dictionary<string, string>();
@@ -118,24 +116,25 @@ namespace Certify.Providers.DNS.CertifyDns
         private JsonSerializerSettings _serializerSettings;
 
         private string _settingsPath { get; set; }
+        private Uri _apiBaseUri { get; set; }
 
+        /// <summary>
+        /// legacy settings are stored under acmedns so we check for both and decide if the regsitration is a real certifydns registration or just another acmedns registration
+        /// </summary>
+        private string _settingsStoreName { get; set; } = "certifydns";
 
-
-        private async Task<ValueTuple<AcmeDnsRegistration, bool>> Register(string settingsPath, string domainId)
+        /// <summary>
+        /// Checks for and loads an existing registration settings file and also returns the computed settings path used.
+        /// </summary>
+        /// <param name="storeName"></param>
+        /// <param name="settingsPath"></param>
+        /// <param name="domainId"></param>
+        /// <param name="apiPrefix"></param>
+        /// <param name="ensureSuffix"></param>
+        /// <returns></returns>
+        private (AcmeDnsRegistration registration, bool isNewRegistration, string fullSettingsPath) EnsureExistingRegistration(string storeName, string settingsPath, string domainId, string apiPrefix, string ensureSuffix = null)
         {
-
-            var apiPrefix = "";
-
-            if (_parameters["api"] != null)
-            {
-                _client.BaseAddress = new System.Uri(_parameters["api"]);
-
-                // we prefix the settings file with the encoded API url as these settings are 
-                // only useful on the target API, changing the api should change all settings
-                apiPrefix = ToUrlSafeBase64String(_client.BaseAddress.Host);
-            }
-
-            var registrationSettingsPath = Path.Combine(settingsPath, "acmedns");
+            var registrationSettingsPath = Path.Combine(settingsPath, storeName);
 
             if (!System.IO.Directory.Exists(registrationSettingsPath))
             {
@@ -158,15 +157,68 @@ namespace Certify.Providers.DNS.CertifyDns
                 // registration exists
                 var reg = JsonConvert.DeserializeObject<AcmeDnsRegistration>(System.IO.File.ReadAllText(registrationSettingsPath));
 
-                // is an existing registration
-                return (reg, false);
+                if (ensureSuffix == null || reg.fulldomain.EndsWith(ensureSuffix))
+                {
+                    // is an existing registration
+                    return (registration: reg, isNewRegistration: false, fullSettingsPath: registrationSettingsPath);
+                }
+                else
+                {
+                    // registration is not a valid certify dns registration, must be annother acme-dns service}
+                    _log?.Warning("Existing acme-dns registration found, new registration required for Certify DNS");
+                }
             }
 
+            // registration config not matched
+            return (registration: null, isNewRegistration: true, fullSettingsPath: registrationSettingsPath);
+        }
+
+        private async Task<(AcmeDnsRegistration registration, bool isNewRegistration)> Register(string settingsPath, string domainId)
+        {
+
+            var apiPrefix = "";
+
+            if (_parameters.TryGetValue("api", out var apiBase) && !string.IsNullOrWhiteSpace(apiBase))
+            {
+                _apiBaseUri = new System.Uri(apiBase);
+
+                if (!_apiBaseUri.ToString().EndsWith("/"))
+                {
+                    _apiBaseUri = new Uri($"{_apiBaseUri}/");
+                }
+
+                _client.BaseAddress = _apiBaseUri;
+
+                // we prefix the settings file with the encoded API url as these settings are 
+                // only useful on the target API, changing the api should change all settings
+                apiPrefix = ToUrlSafeBase64String(_client.BaseAddress.Host);
+            }
+
+            _settingsStoreName = "certifydns";
+
+            var registrationCheck = EnsureExistingRegistration(_settingsStoreName, settingsPath, domainId, apiPrefix);
+            var newRegistrationSettingPath = registrationCheck.fullSettingsPath;
+
+            if (registrationCheck.registration == null)
+            {
+                // try alternative store name
+                _settingsStoreName = "acmedns";
+                registrationCheck = EnsureExistingRegistration(_settingsStoreName, settingsPath, domainId, apiPrefix, ensureSuffix: "auth.certifytheweb.com");
+            }
+
+            // return existing if any
+            if (registrationCheck.registration != null)
+            {
+                return (registration: registrationCheck.registration, isNewRegistration: registrationCheck.isNewRegistration);
+            }
+
+            // start new registration
+            _settingsStoreName = "certifydns";
             var registration = new AcmeDnsRegistration();
 
-            if (_parameters.ContainsKey("allowfrom") && _parameters["allowfrom"] != null)
+            if (_parameters.TryGetValue("allowfrom", out var allowFrom) && !string.IsNullOrWhiteSpace(allowFrom))
             {
-                var rules = _parameters["allowfrom"].Split(';');
+                var rules = allowFrom.Split(';');
                 registration.allowfrom = new List<string>();
                 foreach (var r in rules)
                 {
@@ -181,14 +233,13 @@ namespace Certify.Providers.DNS.CertifyDns
 
             var json = JsonConvert.SerializeObject(registration, _serializerSettings);
 
-            var req = new HttpRequestMessage(HttpMethod.Post, "/register");
+            var req = new HttpRequestMessage(HttpMethod.Post, $"{_apiBaseUri}register");
 
             if (_credentials?.ContainsKey("user") == true && _credentials?.ContainsKey("key") == true)
             {
                 var basicCredentials = "Basic " + ToUrlSafeBase64String(_credentials["user"] + ":" + _credentials["key"]);
                 req.Headers.Add("Authorization", basicCredentials);
             }
-
 
             req.Content = new StringContent(json);
 
@@ -201,7 +252,9 @@ namespace Certify.Providers.DNS.CertifyDns
                 registration = JsonConvert.DeserializeObject<AcmeDnsRegistration>(responseJson);
 
                 // save these settings for later
-                System.IO.File.WriteAllText(registrationSettingsPath, JsonConvert.SerializeObject(registration));
+                System.IO.File.WriteAllText(newRegistrationSettingPath, JsonConvert.SerializeObject(registration));
+
+                _log?.Information("API registration completed");
 
                 // is a new registration
                 return (registration, true);
@@ -209,6 +262,8 @@ namespace Certify.Providers.DNS.CertifyDns
             else
             {
                 // failed to register
+                _log?.Information("API registration failed");
+
                 return (null, false);
             }
         }
@@ -238,7 +293,7 @@ namespace Certify.Providers.DNS.CertifyDns
                 };
             }
 
-            var req = new HttpRequestMessage(HttpMethod.Post, "/update");
+            var req = new HttpRequestMessage(HttpMethod.Post, $"{_apiBaseUri}update");
             req.Headers.Add("X-Api-User", registration.username);
             req.Headers.Add("X-Api-Key", registration.password);
 
@@ -283,7 +338,7 @@ namespace Certify.Providers.DNS.CertifyDns
         public async Task<ActionResult> DeleteRecord(DnsRecord request)
         {
             return await Task.FromResult(
-                new ActionResult { IsSuccess = true, Message = $"Dns Record Delete skipped: {request.RecordName}" }
+                new ActionResult { IsSuccess = true, Message = $"Dns Record Delete skipped (not applicable): {request.RecordName}" }
                 );
         }
 
@@ -301,7 +356,7 @@ namespace Certify.Providers.DNS.CertifyDns
 
             if (parameters?.ContainsKey("propagationdelay") == true)
             {
-                if (int.TryParse(parameters["propagationdelay"], out int customPropDelay))
+                if (int.TryParse(parameters["propagationdelay"], out var customPropDelay))
                 {
                     _customPropagationDelay = customPropDelay;
                 }
@@ -324,6 +379,5 @@ namespace Certify.Providers.DNS.CertifyDns
             var bytes = System.Text.UTF8Encoding.UTF8.GetBytes(val);
             return ToUrlSafeBase64String(bytes);
         }
-
     }
 }

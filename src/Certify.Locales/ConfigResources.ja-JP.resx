@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppName" xml:space="preserve">
-    <value>Certify SSL/TLS 証明書 マネージャー</value>
+    <value>Certify 証明書 マネージャー</value>
   </data>
   <data name="LongAppName" xml:space="preserve">
-    <value>Certify SSL/TLS 証明書 マネージャー</value>
+    <value>Certify 証明書 マネージャー</value>
   </data>
   <data name="UpdateCheckLatestVersion" xml:space="preserve">
     <value>最新バージョンを利用しています。</value>
@@ -138,8 +138,5 @@
 - ACMESharp by Eugene Bekker (https://github.com/ebekker/ACMESharp) Licensed under the MPL V 2.0
 - Some icons from Font Awesome by Dave Gandy - http://fontawesome.io 
 - OpenSSL (https://github.com/openssl-net/openssl-net)</value>
-  </data>
-  <data name="GettingStartedExistingVault" xml:space="preserve">
-    <value>はじめに：左のVaultを参照して、現在の証明書情報を確認します。</value>
   </data>
 </root>

@@ -15,12 +15,12 @@ namespace Certify.Models.Config
 
     public class ProviderDefinition
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string HelpUrl { get; set; }
-        public List<ProviderParameter> ProviderParameters { get; set; }
-        public string Config { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
+        public string? HelpUrl { get; set; } = string.Empty;
+        public List<ProviderParameter>? ProviderParameters { get; set; } = new();
+        public string? Config { get; set; }
         public bool IsExperimental { get; set; }
 
         /// <summary>
@@ -28,7 +28,9 @@ namespace Certify.Models.Config
         /// </summary>
         public bool IsEnabled { get; set; } = true;
         public bool IsTestModeSupported { get; set; } = true;
-        public bool HasDynamicParameters { get; set; } = false;
+        public bool HasDynamicParameters { get; set; }
+
+        public string ProviderCategoryId { get; set; } = string.Empty;
 
         public ProviderDefinition()
         {
@@ -38,7 +40,7 @@ namespace Certify.Models.Config
 
     public class ChallengeProviderDefinition : ProviderDefinition
     {
-        public string ChallengeType { get; set; }
+        public string? ChallengeType { get; set; } = String.Empty;
         public ChallengeHandlerType HandlerType { get; set; }
         public int PropagationDelaySeconds { get; set; }
 
@@ -72,7 +74,7 @@ namespace Certify.Models.Config
         /// <summary>
         /// Default title for a new task of this type
         /// </summary>
-        public string DefaultTitle { get; set; }
+        public string? DefaultTitle { get; set; } = string.Empty;
 
         /// <summary>
         /// Flags for allowed usage types
@@ -85,8 +87,13 @@ namespace Certify.Models.Config
         public DeploymentContextType SupportedContexts { get; set; } = DeploymentContextType.LocalAsService;
 
         /// <summary>
+        /// If true, task type supports running against remote hosts
+        /// </summary>
+        public bool SupportsRemoteTarget { get; set; }
+
+        /// <summary>
         /// If set, challenge type of external credential required
         /// </summary>
-        public string ExternalCredentialType { get; set; }
+        public string? ExternalCredentialType { get; set; }
     }
 }

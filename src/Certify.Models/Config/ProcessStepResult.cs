@@ -2,8 +2,10 @@
 {
     public class ProcessStepResult
     {
-        public bool IsSuccess;
-        public string ErrorMessage;
-        public object Result;
+        public bool IsSuccess { get; set; }
+        public string? ErrorMessage { get; set; } = string.Empty;
+        public object? Result { get; set; }
+
+        public object? SupportingData { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Certify.Models.Config;
 using Certify.Models.Plugins;
 using Certify.Models.Providers;
+using Certify.Plugins;
 using Newtonsoft.Json;
 
 namespace Certify.Providers.DNS.IONOS
@@ -26,8 +27,8 @@ namespace Certify.Providers.DNS.IONOS
         public static ChallengeProviderDefinition Definition => new ChallengeProviderDefinition
         {
             Id = "DNS01.API.IONOS",
-            Title = "IONOS DNS API",
-            Description = "Validates via IONOS DNS APIs using keys",
+            Title = "IONOS DNS API (Deprecated - Use Posh-ACME version instead)",
+            Description = "Validates via IONOS DNS APIs using keys. This provider is deprecated and you should switch to the Posh-ACME version.",
             PropagationDelaySeconds = 60,
             ProviderParameters = new List<ProviderParameter>
             {
@@ -65,6 +66,7 @@ namespace Certify.Providers.DNS.IONOS
                 result.Message = "Authentication failed";
                 result.IsSuccess = false;
             }
+
             return result;
         }
 
@@ -73,7 +75,17 @@ namespace Certify.Providers.DNS.IONOS
             if (string.IsNullOrEmpty(request.ZoneId))
             {
                 var zones = await GetZones();
-                request.ZoneId = zones.Single(z => request.TargetDomainName.Contains(z.Name)).ZoneId;
+
+                // match exact zone to domain or longest match zone name
+                var zoneId = zones
+                    .OrderByDescending(z => z.Name.Length)
+                    .FirstOrDefault(z => request.TargetDomainName == z.Name || request.TargetDomainName.EndsWith("." + z.Name))?
+                .ZoneId;
+
+                if (string.IsNullOrEmpty(zoneId))
+                {
+                    throw new Exception($"[{ProviderTitle}] Failed to match record to a DNS zone: {request.TargetDomainName} ");
+                }
             }
 
             return request;
@@ -182,7 +194,7 @@ namespace Certify.Providers.DNS.IONOS
             return records;
         }
 
-        public async override Task<List<DnsZone>> GetZones()
+        public override async Task<List<DnsZone>> GetZones()
         {
             var rawJsonDefinition = new[] { new { name = string.Empty, id = string.Empty, type = string.Empty } };
             var result = await _client.SendAsync(CreateRequest(HttpMethod.Get, baseUri + "zones"));
@@ -223,5 +235,4 @@ namespace Certify.Providers.DNS.IONOS
         public bool IsTestModeSupported => Definition.IsTestModeSupported;
         public List<ProviderParameter> ProviderParameters => Definition.ProviderParameters;
     }
-
 }

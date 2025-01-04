@@ -8,6 +8,7 @@ using Certify.Models;
 using Certify.Models.Config;
 using Certify.Models.Plugins;
 using Certify.Models.Providers;
+using Certify.Plugins;
 using Newtonsoft.Json;
 
 namespace Certify.Providers.DNS.AWSRoute53
@@ -167,9 +168,16 @@ namespace Certify.Providers.DNS.AWSRoute53
 
                 if (targetRecordSet != null)
                 {
-                    targetRecordSet.ResourceRecords.Add(
-                          new ResourceRecord { Value = "\"" + request.RecordValue + "\"" }
-                        );
+                    if (targetRecordSet.ResourceRecords.Any(t => t.Value == "\"" + request.RecordValue + "\""))
+                    {
+                        return new ActionResult { IsSuccess = true, Message = $"Dns Record already exists with required value. Skipping." };
+                    }
+                    else
+                    {
+                        targetRecordSet.ResourceRecords.Add(
+                              new ResourceRecord { Value = "\"" + request.RecordValue + "\"" }
+                            );
+                    }
                 }
                 else
                 {
@@ -289,7 +297,7 @@ namespace Certify.Providers.DNS.AWSRoute53
 
             if (parameters?.ContainsKey("propagationdelay") == true)
             {
-                if (int.TryParse(parameters["propagationdelay"], out int customPropDelay))
+                if (int.TryParse(parameters["propagationdelay"], out var customPropDelay))
                 {
                     _customPropagationDelay = customPropDelay;
                 }

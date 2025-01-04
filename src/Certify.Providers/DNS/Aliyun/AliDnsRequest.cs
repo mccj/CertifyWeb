@@ -8,9 +8,9 @@ namespace Certify.Providers.DNS.Aliyun
 {
     internal class AliDnsRequest
     {
-        const string DNS_SERVICE_BASE_ADDRESS = "https://alidns.aliyuncs.com";
+        private const string DNS_SERVICE_BASE_ADDRESS = "https://alidns.aliyuncs.com";
 
-        public static string CreateTimaStamp() => DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
+        public static string CreateTimaStamp() => DateTime.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"));
 
         private HttpMethod _httpMethod;
 
@@ -57,6 +57,7 @@ namespace Certify.Providers.DNS.Aliyun
                     temp[i + 2] = char.ToUpper(temp[i + 2]);
                 }
             }
+
             return new string(temp);
         }
 
@@ -113,7 +114,6 @@ namespace Certify.Providers.DNS.Aliyun
         REDIRECT_URL,
         FORWARD_URL
     }
-
 
     public class DomainRecord
     {

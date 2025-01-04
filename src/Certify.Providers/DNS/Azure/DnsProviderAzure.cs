@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure;
+using Azure.Identity;
+using Azure.ResourceManager;
+using Azure.ResourceManager.Dns;
+using Azure.ResourceManager.Dns.Models;
+using Azure.ResourceManager.Resources;
 using Certify.Models.Config;
 using Certify.Models.Plugins;
 using Certify.Models.Providers;
-using Microsoft.Azure.Management.Dns;
-using Microsoft.Azure.Management.Dns.Models;
-using Microsoft.Azure.Management.ResourceManager.Fluent;
-using Microsoft.Rest.Azure.Authentication;
+using Certify.Plugins;
 
 namespace Certify.Providers.DNS.Azure
 {
@@ -18,9 +21,11 @@ namespace Certify.Providers.DNS.Azure
     {
         private ILog _log;
 
-        private DnsManagementClient _dnsClient;
+        private ArmClient _azureClient = null;
+        private SubscriptionResource _subscription = null;
 
         private Dictionary<string, string> _credentials;
+        private Dictionary<string, string> _parameters;
 
         private int? _customPropagationDelay = null;
 
@@ -47,9 +52,9 @@ namespace Certify.Providers.DNS.Azure
             PropagationDelaySeconds = 60,
             ProviderParameters = new List<ProviderParameter>{
                         new ProviderParameter{ Key="service",Name="Azure Service", IsRequired=true, IsPassword=false, IsCredential=true, Value="global", OptionsList="global=Azure Cloud; china=Azure China; germany=Azure Germany; usgov=Azure US Government" },
-                        new ProviderParameter{ Key="tenantid", Name="Tenant Id", IsRequired=false },
-                        new ProviderParameter{ Key="clientid", Name="Application Id", IsRequired=false },
-                        new ProviderParameter{ Key="secret",Name="Svc Principal Secret", IsRequired=true , IsPassword=true},
+                        new ProviderParameter{ Key="tenantid", Name="Directory (tenant) Id", IsRequired=false },
+                        new ProviderParameter{ Key="clientid", Name="Application (client) Id", IsRequired=false },
+                        new ProviderParameter{ Key="secret",Name="Client Secret", IsRequired=true , IsPassword=true},
                         new ProviderParameter{ Key="subscriptionid",Name="DNS Subscription Id", IsRequired=true , IsPassword=false},
                         new ProviderParameter{ Key="resourcegroupname",Name="Resource Group Name", IsRequired=true , IsPassword=false},
                         new ProviderParameter{ Key="zoneid",Name="DNS Zone Name", IsRequired=true, IsPassword=false, IsCredential=false }
@@ -85,99 +90,79 @@ namespace Certify.Providers.DNS.Azure
             }
         }
 
-        public async Task<bool> InitProvider(Dictionary<string, string> credentials, Dictionary<string, string> parameters, ILog log = null)
-        {
-            _log = log;
-
-            _credentials = credentials;
-
-            // https://docs.microsoft.com/en-us/dotnet/api/overview/azure/dns?view=azure-dotnet
-
-            _credentials.TryGetValue("service", out var service);
-
-            var azureEnvironment = MapAzureServiceToAzureEnvironment(service);
-            var azureAdSettings = MapAzureEnvironmentToADSettings(azureEnvironment);
-
-            var serviceCreds = await ApplicationTokenProvider.LoginSilentAsync(
-                _credentials["tenantid"],
-                _credentials["clientid"],
-                _credentials["secret"],
-                azureAdSettings
-                );
-
-            _dnsClient = new DnsManagementClient(serviceCreds)
-            {
-                SubscriptionId = _credentials["subscriptionid"],
-                BaseUri = new Uri(azureEnvironment.ResourceManagerEndpoint)
-            };
-
-            if (parameters?.ContainsKey("propagationdelay") == true)
-            {
-                if (int.TryParse(parameters["propagationdelay"], out int customPropDelay))
-                {
-                    _customPropagationDelay = customPropDelay;
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Map our service selection to the configuration for an Azure Environment, default is standard Azure Cloud
-        /// </summary>
-        /// <param name="service"></param>
-        /// <returns></returns>
-        private AzureEnvironment MapAzureServiceToAzureEnvironment(string service)
+        internal static Uri MapServiceToAuthorityHost(string service)
         {
             if (string.IsNullOrEmpty(service))
             {
-                return AzureEnvironment.AzureGlobalCloud;
+                return AzureAuthorityHosts.AzurePublicCloud;
             }
 
             switch (service.Trim())
             {
                 case "global":
-                    return AzureEnvironment.AzureGlobalCloud;
+                    return AzureAuthorityHosts.AzurePublicCloud;
                 case "usgov":
-                    return AzureEnvironment.AzureUSGovernment;
+                    return AzureAuthorityHosts.AzureGovernment;
                 case "china":
-                    return AzureEnvironment.AzureChinaCloud;
+                    return AzureAuthorityHosts.AzureChina;
                 case "germany":
-                    return AzureEnvironment.AzureGermanCloud;
+                    return AzureAuthorityHosts.AzureGermany;
                 default:
-                    return AzureEnvironment.FromName(service);
+                    return AzureAuthorityHosts.AzurePublicCloud;
             }
         }
 
+        public async Task<bool> InitProvider(Dictionary<string, string> credentials, Dictionary<string, string> parameters, ILog log = null)
+        {
+            _log = log;
+
+            _credentials = credentials;
+            _parameters = parameters;
+
+            // https://learn.microsoft.com/en-us/dotnet/api/overview/azure/ResourceManager.Dns-readme?view=azure-dotnet
+
+            _credentials.TryGetValue("service", out var azureServiceEnvironment);
+
+            var azureCred = new ClientSecretCredential(credentials["tenantid"], credentials["clientid"], credentials["secret"], new ClientSecretCredentialOptions { AuthorityHost = MapServiceToAuthorityHost(azureServiceEnvironment) });
+            _azureClient = new ArmClient(azureCred, credentials["subscriptionid"], new ArmClientOptions { Environment = MapAzureServiceToAzureEnvironment(azureServiceEnvironment) });
+            _subscription = await _azureClient.GetDefaultSubscriptionAsync();
+
+            if (parameters?.ContainsKey("propagationdelay") == true)
+            {
+                if (int.TryParse(parameters["propagationdelay"], out var customPropDelay))
+                {
+                    _customPropagationDelay = customPropDelay;
+                }
+            }
+
+            return true;
+        }
 
         /// <summary>
-        /// Map an Azure environment to the corresponding Active Directory settings
+        /// Map our azureServiceEnvironment selection to the configuration for an Azure Environment, default is standard Azure Cloud
         /// </summary>
-        /// <param name="env"></param>
+        /// <param name="service"></param>
         /// <returns></returns>
-
-        private ActiveDirectoryServiceSettings MapAzureEnvironmentToADSettings(AzureEnvironment env)
+        private ArmEnvironment MapAzureServiceToAzureEnvironment(string service)
         {
-            if (env == null)
+            if (string.IsNullOrEmpty(service))
             {
-                return ActiveDirectoryServiceSettings.Azure;
-            }
-            else if (env.Name == AzureEnvironment.AzureUSGovernment.Name)
-            {
-                return ActiveDirectoryServiceSettings.AzureUSGovernment;
-            }
-            else if (env.Name == AzureEnvironment.AzureGermanCloud.Name)
-            {
-                return ActiveDirectoryServiceSettings.AzureGermany;
-            }
-            else if (env.Name == AzureEnvironment.AzureChinaCloud.Name)
-            {
-                return ActiveDirectoryServiceSettings.AzureChina;
-            }
-            else
-            {
-                return ActiveDirectoryServiceSettings.Azure;
+                return ArmEnvironment.AzurePublicCloud;
             }
 
+            switch (service.Trim())
+            {
+                case "global":
+                    return ArmEnvironment.AzurePublicCloud;
+                case "usgov":
+                    return ArmEnvironment.AzureGovernment;
+                case "china":
+                    return ArmEnvironment.AzureChina;
+                case "germany":
+                    return ArmEnvironment.AzureGermany;
+                default:
+                    return ArmEnvironment.AzurePublicCloud;
+            }
         }
 
         public async Task<ActionResult> CreateRecord(DnsRecord request)
@@ -191,65 +176,89 @@ namespace Certify.Providers.DNS.Azure
 
             var recordName = NormaliseRecordName(domainInfo, request.RecordName);
 
-            var recordSetParams = new RecordSet
-            {
-                TTL = 5,
-                TxtRecords = new List<TxtRecord>
-                {
-                    new TxtRecord(new[] {
-                        request.RecordValue
-                    })
-                }
-            };
-
             try
             {
-                var currentRecord = await _dnsClient.RecordSets.GetAsync(_credentials["resourcegroupname"], request.ZoneId, recordName, RecordType.TXT);
+                var zone = _zones.FirstOrDefault(z => z.Data.Name == request.ZoneId);
 
-                if (currentRecord != null && currentRecord.TxtRecords.Any())
+                var currentRecords = zone.GetDnsTxtRecords();
+
+                if (currentRecords.Any(t => t.Data.Name == recordName))
                 {
-                    foreach (var record in currentRecord.TxtRecords)
+                    // update existing
+                    var existing = currentRecords.FirstOrDefault(t => t.Data.Name == recordName);
+
+                    if (existing.Data.DnsTxtRecords.Any(t => t.Values.Any(v => v == request.RecordValue)))
                     {
-                        recordSetParams.TxtRecords.Add(record);
+                        // already exists
+                        return new ActionResult
+                        {
+                            IsSuccess = true,
+                            Message = $"DNS TXT Record Already Exists: {recordName} in root domain {domainInfo.RootDomain} with value: {request.RecordValue} "
+                        };
+                    }
+                    else
+                    {
+                        var txtRecordInfo = new DnsTxtRecordInfo();
+                        txtRecordInfo.Values.Add(request.RecordValue);
+                        existing.Data.DnsTxtRecords.Add(txtRecordInfo);
+                    }
+
+                    var result = await existing.UpdateAsync(existing.Data);
+                    if (result?.Value?.HasData == true)
+                    {
+                        return new ActionResult
+                        {
+                            IsSuccess = true,
+                            Message = $"DNS TXT Record Created: {recordName} in root domain {domainInfo.RootDomain} with value: {request.RecordValue} "
+                        };
+                    }
+                    else
+                    {
+                        return new ActionResult
+                        {
+                            IsSuccess = true,
+                            Message = "DNS TXT record creation failed."
+                        };
                     }
                 }
-
-            }
-            catch
-            {
-                // No record exist
-            }
-
-            try
-            {
-                var result = await _dnsClient.RecordSets.CreateOrUpdateAsync(
-                       _credentials["resourcegroupname"],
-                       request.ZoneId,
-                       recordName,
-                       RecordType.TXT,
-                       recordSetParams
-                );
-
-
-                if (result != null)
+                else
                 {
-                    return new ActionResult
+                    var newTxtRecord = new DnsTxtRecordData { TtlInSeconds = 5 };
+                    var newTxtRecordValue = new DnsTxtRecordInfo();
+                    newTxtRecordValue.Values.Add(request.RecordValue);
+                    newTxtRecord.DnsTxtRecords.Add(newTxtRecordValue);
+
+                    var result = await currentRecords.CreateOrUpdateAsync(WaitUntil.Completed, recordName, newTxtRecord);
+
+                    if (result != null)
                     {
-                        IsSuccess = true,
-                        Message = $"DNS TXT Record Created: {recordName} in root domain {domainInfo.RootDomain} with value: {request.RecordValue} "
-                    };
+                        return new ActionResult
+                        {
+                            IsSuccess = true,
+                            Message = $"DNS TXT Record Created: {recordName} in root domain {domainInfo.RootDomain} with value: {request.RecordValue} "
+                        };
+                    }
+                    else
+                    {
+                        return new ActionResult
+                        {
+                            IsSuccess = true,
+                            Message = "DNS TXT record creation failed."
+                        };
+                    }
                 }
             }
             catch (Exception exp)
             {
-                return new ActionResult { IsSuccess = false, Message = (exp.InnerException != null ? exp.InnerException.Message : exp.Message) };
+                // failed
+                _log.Warning($"Azure DNS create record failed: {exp.Message}");
+                return new ActionResult { IsSuccess = false, Message = $"DNS TXT Record create failed {exp.Message}" };
             }
-
-            return new ActionResult { IsSuccess = false, Message = "DNS TXT Record create failed" };
         }
 
         public async Task<ActionResult> DeleteRecord(DnsRecord request)
         {
+
             var domainInfo = await DetermineZoneDomainRoot(request.RecordName, request.ZoneId);
 
             if (string.IsNullOrEmpty(domainInfo.RootDomain))
@@ -261,33 +270,73 @@ namespace Certify.Providers.DNS.Azure
 
             try
             {
-                await _dnsClient.RecordSets.DeleteAsync(
-                       _credentials["resourcegroupname"],
-                       request.ZoneId,
-                       recordName,
-                       RecordType.TXT
-               );
+                var zone = _zones.FirstOrDefault(z => z.Data.Name == request.ZoneId);
 
-                return new ActionResult { IsSuccess = true, Message = $"DNS TXT Record '{recordName}' Deleted" };
+                var currentRecords = zone.GetDnsTxtRecords();
+
+                var existing = currentRecords.FirstOrDefault(t => t.Data.Name == recordName);
+
+                // if a TXT record existis with the same name and multiple values either remove the target value or remove the whole record is no more values present
+                if (existing.HasData)
+                {
+                    // delete existing entry
+                    var toRemove = existing.Data.DnsTxtRecords
+                        .Where(r => r.Values.Contains(request.RecordValue))
+                        .ToList();
+
+                    foreach (var t in toRemove)
+                    {
+                        existing.Data.DnsTxtRecords.Remove(t);
+                    }
+
+                    if (existing.Data.DnsTxtRecords.Any() == false)
+                    {
+                        // no more values, delete the record
+                        await existing.DeleteAsync(WaitUntil.Completed);
+                    }
+                    else
+                    {
+                        // update the record
+                        await existing.UpdateAsync(existing.Data);
+                    }
+
+                    return new ActionResult { IsSuccess = true, Message = $"DNS TXT Record '{recordName}' Deleted" };
+                }
             }
             catch (Exception exp)
             {
-                return new ActionResult { IsSuccess = false, Message = "DNS TXT Record '{recordName}' Delete failed: " + exp.InnerException.Message };
+                return new ActionResult { IsSuccess = false, Message = "DNS TXT Record '{recordName}' Delete failed: " + exp.InnerException?.Message ?? exp.Message };
             }
+
+            return new ActionResult { IsSuccess = true, Message = $"DNS TXT Record '{recordName}' delete not required" };
+
         }
 
+        private List<DnsZoneResource> _zones = new List<DnsZoneResource>();
         public override async Task<List<DnsZone>> GetZones()
         {
-            var results = new List<DnsZone>();
-
-            // azure defaults to returning only the first 100 zones, and the max that can be listed in one call is 1000
-            // TODO: move to paging API.
-            var list = await _dnsClient.Zones.ListAsync(top: 999);
-            foreach (var z in list)
+            if (_zones.Any())
             {
-                results.Add(new DnsZone { ZoneId = z.Name, Name = z.Name });
+                return _zones.Select(z => new DnsZone { ZoneId = z.Data.Name, Name = z.Data.Name }).ToList();
             }
-            return results;
+            else
+            {
+                var results = new List<DnsZone>();
+
+                var zones = _subscription.GetDnsZonesAsync(1000);
+
+                var zonesEnumerator = zones.GetAsyncEnumerator();
+
+                while (await zonesEnumerator.MoveNextAsync())
+                {
+                    var z = zonesEnumerator.Current;
+                    results.Add(new DnsZone { ZoneId = z.Data.Name, Name = z.Data.Name });
+
+                    _zones.Add(z);
+                }
+
+                return results;
+            }
         }
     }
 }

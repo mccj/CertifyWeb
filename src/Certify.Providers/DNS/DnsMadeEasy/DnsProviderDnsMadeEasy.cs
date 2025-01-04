@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Certify.Models.Config;
 using Certify.Models.Plugins;
 using Certify.Models.Providers;
+using Certify.Plugins;
 using Newtonsoft.Json;
 
 namespace Certify.Providers.DNS.DnsMadeEasy
@@ -62,8 +63,8 @@ namespace Certify.Providers.DNS.DnsMadeEasy
         public static ChallengeProviderDefinition Definition => new ChallengeProviderDefinition
         {
             Id = "DNS01.API.DnsMadeEasy",
-            Title = "DnsMadeEasy DNS API",
-            Description = "Validates via DnsMadeEasy APIs using credentials found in your DnsMadeEasy control panel under Config - Account Settings",
+            Title = "DnsMadeEasy DNS API (Deprecated - Use Posh-ACME version instead)",
+            Description = "Validates via DnsMadeEasy APIs. This provider is deprecated and you should switch to the Posh-ACME version.",
             HelpUrl = "https://docs.certifytheweb.com/docs/dns/providers/dnsmadeeasy",
             PropagationDelaySeconds = 120,
             ProviderParameters = new List<ProviderParameter>{
@@ -283,7 +284,7 @@ namespace Certify.Providers.DNS.DnsMadeEasy
 
             if (parameters?.ContainsKey("propagationdelay") == true)
             {
-                if (int.TryParse(parameters["propagationdelay"], out int customPropDelay))
+                if (int.TryParse(parameters["propagationdelay"], out var customPropDelay))
                 {
                     _customPropagationDelay = customPropDelay;
                 }

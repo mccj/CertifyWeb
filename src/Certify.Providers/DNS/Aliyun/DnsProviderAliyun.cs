@@ -7,6 +7,7 @@ using Certify.Models;
 using Certify.Models.Config;
 using Certify.Models.Plugins;
 using Certify.Models.Providers;
+using Certify.Plugins;
 using Newtonsoft.Json;
 
 namespace Certify.Providers.DNS.Aliyun
@@ -43,8 +44,8 @@ namespace Certify.Providers.DNS.Aliyun
         public static ChallengeProviderDefinition Definition => new ChallengeProviderDefinition
         {
             Id = "DNS01.API.Aliyun",
-            Title = "Aliyun (Alibaba Cloud) DNS API",
-            Description = "Validates via Aliyun DNS APIs using api key and secret",
+            Title = "Aliyun DNS API (Deprecated - Use Posh-ACME version instead)",
+            Description = "Validates via Aliyun DNS APIs using api key and secret. This provider is deprecated and you should switch to the Posh-ACME version.",
             HelpUrl = "https://help.aliyun.com/document_detail/29739.html",
             PropagationDelaySeconds = 120,
             ProviderParameters = new List<ProviderParameter>
@@ -262,7 +263,7 @@ namespace Certify.Providers.DNS.Aliyun
 
             if (parameters?.ContainsKey("propagationdelay") == true)
             {
-                if (int.TryParse(parameters["propagationdelay"], out int customPropDelay))
+                if (int.TryParse(parameters["propagationdelay"], out var customPropDelay))
                 {
                     _customPropagationDelay = customPropDelay;
                 }

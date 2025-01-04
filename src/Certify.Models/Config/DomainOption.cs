@@ -3,9 +3,9 @@
     public class DomainOption : BindableBase
     {
         /// <summary>
-        /// Domain name we are managing 
+        /// Domain/IP/value which is a candidate identifier for inclusion. Still called Domain to allow deserialization of existing config.
         /// </summary>
-        public string Domain { get; set; }
+        public string? Domain { get; set; } = string.Empty;
 
         /// <summary>
         /// If true, this item is the primary subject for the certificate request 
@@ -23,7 +23,7 @@
         /// </summary>
         public bool IsManualEntry { get; set; }
 
-        public string Title { get; set; }
+        public string? Title { get; set; } = string.Empty;
 
         public string Type { get; set; } = "dns";
     }

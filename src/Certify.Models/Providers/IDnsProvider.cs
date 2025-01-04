@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#nullable disable
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Certify.Models.Config;
@@ -93,7 +94,7 @@ namespace Certify.Models.Providers
 
             if (zoneId != null)
             {
-                var zone = zones.FirstOrDefault(z => z?.ZoneId?.ToLower() == zoneId.ToLower().Trim());
+                var zone = zones.FirstOrDefault(z => z?.ZoneId?.ToLowerInvariant() == zoneId.ToLowerInvariant().Trim());
                 if (zone != null)
                 {
                     return new DnsRecord
@@ -114,21 +115,22 @@ namespace Certify.Models.Providers
                 var zoneLabelDepth = z.Name.Count(c => c == '.');
                 var matchedLabelDepth = info.RootDomain?.Count(c => c == '.') ?? -1;
 
-                if (string.Equals(recordName, z.Name, System.StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(recordName, z.Name, System.StringComparison.OrdinalIgnoreCase))
                 {
                     info.RootDomain = z.Name;
                     info.ZoneId = z.ZoneId;
                 }
-                else if (recordName.EndsWith("." + z.Name) && (info.RootDomain == null || zoneLabelDepth > matchedLabelDepth))
+                else if (recordName.EndsWith("." + z.Name, System.StringComparison.OrdinalIgnoreCase) && (info.RootDomain == null || zoneLabelDepth > matchedLabelDepth))
                 {
                     info.RootDomain = z.Name;
                     info.ZoneId = z.ZoneId;
                 }
             }
+
             return info;
         }
 
-        public string NormaliseRecordName(DnsRecord info, string recordName)
+        public static string NormaliseRecordName(DnsRecord info, string recordName)
         {
             var result = recordName.Replace(info.RootDomain, "");
             result = result.TrimEnd('.');
