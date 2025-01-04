@@ -1,0 +1,6 @@
+@CertifyWeb.Server_HostAddress = http://localhost:5032
+
+GET {{CertifyWeb.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
