@@ -45,12 +45,12 @@ namespace Certify.Models
         OPTIONAL_LIFETIME_DAYS
     }
 
-    public static class StandardCertAuthorities
-    {
-        public const string LETS_ENCRYPT = "letsencrypt.org";
-        public const string BUYPASS = "buypass.com";
-        public const string ZEROSSL = "zerossl.com";
-    }
+    //public static class StandardCertAuthorities
+    //{
+    //    public const string LETS_ENCRYPT = "letsencrypt.org";
+    //    public const string BUYPASS = "buypass.com";
+    //    public const string ZEROSSL = "zerossl.com";
+    //}
 
     public static class StandardKeyTypes
     {

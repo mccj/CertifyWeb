@@ -1,7 +1,11 @@
 using Certify.ACME.Anvil;
+using Certify.ACME.Anvil.Acme;
 using Certify.ACME.Anvil.Acme.Resource;
+using Certify.Models;
+using Certify.Models.Providers;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
 using TestProject1;
 
 namespace CertifyWeb.Server.Controllers
@@ -39,73 +43,15 @@ namespace CertifyWeb.Server.Controllers
         [HttpPost]
         public async Task RequestCertificaAsync()
         {
+            var dnsAPIProvider = await getDnsProviderAsync();
+            var acme = await getAcmeAsync();
+            var order1 = getOrder();
+
             var _idnMapping = new IdnMapping();
-            var acmeCore = new AcmeCore();
-            var dnsAPIProvider = await AcmeCore.GetDnsProvider("",
-                new System.Collections.Generic.Dictionary<string, string> {
-                    {"accesskeyid","9d1iVcZKohGyMxFQ" },
-                    {"accesskeysecret","DSw7DhfTFLR86khoBvGtKuO8giKO1r" }
-                },
-                new System.Collections.Generic.Dictionary<string, string> { }
-            );
-
-            var authzDomain = "cluster.ink";
-
-            //创建新的 ACME 帐户
-            var _certificateAuthorities = Certify.Models.CertificateAuthority.CoreCertificateAuthorities;
-            ////Let's Encrypt
-            //var acme = new AcmeContext(WellKnownServers.LetsEncryptV2);
-            var acme = new AcmeContext(new Uri("https://acme-v02.api.letsencrypt.org/directory"));
-            var account = await acme.NewAccount("mccj@qq.com", true);
-            //ZeroSSL
-            //var acme = new AcmeContext(new Uri("https://acme.zerossl.com/v2/DV90"));
-            //var account = await acme.NewAccount("mccj@qq.com", true, "GHdIvPgCbFnTvT1UInZilg", "4TanG5iwyOuSJ4Uks6YOZu1-IMaSSB2NXw5PeS6KavCxXhFIbdojPg2TcZuITZSFXqNZQ0UZW1iYDBKOvXzEsQ","");
-
-            //var acme = new AcmeContext(new Uri("https://acme.ssl.com/sslcom-dv-rsa"));
-            //var account = await acme.NewAccount("mccj@qq.com", true, "f8f7fd2753f1", "erUWeYxn1y-_AY9RnYmbehs8iZRuWRj6W6ja3iPkVJU");
-
-            //var acme = new AcmeContext(new Uri("https://api.buypass.com/acme/directory"));
-            //var account = await acme.NewAccount("mccj@qq.com", true, "f8f7fd2753f1", "erUWeYxn1y-_AY9RnYmbehs8iZRuWRj6W6ja3iPkVJU");
-
-            //var tos = await acme.TermsOfService();
-            //var account1 = await acme.Account();
-            //var accountInfo = await account.Resource();
-
-            // Save the account key for later use
-            var pemKey = acme.AccountKey.ToPem();
-            //var der = acme.AccountKey.ToDer();
-
-
-
-            //            //使用现有的 ACME 帐户
-            //            //// Load the saved account key
-            //            var pemKey = @"-----BEGIN EC PRIVATE KEY-----
-            //MHcCAQEEIGWuCAtg4N0WlJ2UPXooBKdFWIr9v9LroE3iCZZYfZlzoAoGCCqGSM49
-            //AwEHoUQDQgAEnI6InAF6yK3SDfwlyKrRalUxWp7DHOLBKwj9aFUQftpr7YAUBM1h
-            //RzzSLxhiQGbGr3tGfS5PIFtALSRW2pWipA==
-            //-----END EC PRIVATE KEY-----
-            //";
-            //            var accountKey = KeyFactory.FromPem(pemKey);
-            //            var acme = new AcmeContext(WellKnownServers.LetsEncryptStagingV2, accountKey);
-            //            var account = await acme.Account();
 
             //放置通配符证书订单（通配符证书需要 DNS 验证）
-            var certificateIdentifiers = new[] {
-                new Identifier{ Type= IdentifierType.Dns, Value= authzDomain },
-                new Identifier{ Type= IdentifierType.Dns, Value= "*." + authzDomain },
-                //new Identifier{ Type= IdentifierType.Dns, Value= "k8s." + authzDomain },
-                new Identifier{ Type= IdentifierType.Dns, Value= "*.k8s." + authzDomain },
-                //new Identifier{ Type= IdentifierType.Dns, Value= "prd." + authzDomain },
-                new Identifier{ Type= IdentifierType.Dns, Value= "*.prd.k8s." + authzDomain },
-                //new Identifier{ Type= IdentifierType.Dns, Value= "dev." + authzDomain },
-                new Identifier{ Type= IdentifierType.Dns, Value= "*.dev.k8s." + authzDomain },
-                //new Identifier{ Type= IdentifierType.Dns, Value= "app." + authzDomain },
-                new Identifier{ Type= IdentifierType.Dns, Value= "*.app.k8s." + authzDomain },
-                //new Identifier{ Type= IdentifierType.Dns, Value= "dbs." + authzDomain },
-                new Identifier{ Type= IdentifierType.Dns, Value= "*.dbs.k8s." + authzDomain },
-                //new Identifier{ Type= IdentifierType.Dns, Value= "test." + authzDomain },
-                new Identifier{ Type= IdentifierType.Dns, Value= "*.test.k8s." + authzDomain }
-            };
+            var certificateIdentifiers = new[] { order1.PrimaryDomain }.Concat(order1.Domains).Distinct().Select(f => new Identifier { Type = order1.IdentifierType, Value = f }).ToArray();
+
             var order = await acme.NewOrder(certificateIdentifiers);
             var orderUri = order.Location;
 
@@ -134,7 +80,7 @@ namespace CertifyWeb.Server.Controllers
 
                 var txtRecordName = _idnMapping.GetAscii(dnsKey).ToLower().Trim();
                 //var a2 = dnsAPIProvider.Test().Result;
-                var ss = new Certify.Models.Providers.DnsRecord() { RecordType = "TXT", ZoneId = "9855804ce5224f33a0f38e1fc669fe73", TargetDomainName = authzDomain, RecordName = txtRecordName, RecordValue = dnsTxt };
+                var ss = new Certify.Models.Providers.DnsRecord() { RecordType = "TXT", ZoneId = "9855804ce5224f33a0f38e1fc669fe73", TargetDomainName = order1.PrimaryDomain, RecordName = txtRecordName, RecordValue = dnsTxt };
                 var a3 = dnsAPIProvider.CreateRecord(ss).Result;
                 //var a4 = dnsAPIProvider.DeleteRecord(ss).Result;
 
@@ -198,7 +144,7 @@ namespace CertifyWeb.Server.Controllers
                  //State = "State",
                  //Locality = "City",
                  //Organization = "Dept",
-                 CommonName = _idnMapping.GetAscii(authzDomain)
+                 CommonName = _idnMapping.GetAscii(order1.PrimaryDomain)
              }, privateKey);
 
             //var csr = new Certes.Pkcs.CertificationRequestBuilder();
@@ -211,7 +157,8 @@ namespace CertifyWeb.Server.Controllers
             //var certChain2 = await order.Download("ISRG X1 Root");
 
 
-            var cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certChain.Certificate.ToDer());
+            //var cert = new System.Security.Cryptography.X509Certificates.X509Certificate2(certChain.Certificate.ToDer());
+            var cert = X509CertificateLoader.LoadCertificate(certChain.Certificate.ToDer());
             var certFriendlyName = $"[Certify] {cert.GetEffectiveDateString()} to {cert.GetExpirationDateString()}";
 
             //var cert222 = new CertificateInfo(certChain, privateKey);
@@ -225,8 +172,8 @@ namespace CertifyWeb.Server.Controllers
             var pfxBytes = pfx.Build(certFriendlyName, "`1q2w3e4r");//pfx文件
 
 
-            System.IO.File.WriteAllBytes(authzDomain + ".pfx", pfxBytes);
-            System.IO.File.WriteAllText(authzDomain + ".cer", certPem11);
+            System.IO.File.WriteAllBytes(order1.PrimaryDomain + ".pfx", pfxBytes);
+            System.IO.File.WriteAllText(order1.PrimaryDomain + ".cer", certPem11);
             System.IO.File.WriteAllText("privkey.txt", privkeyPem);
 
 
@@ -261,6 +208,100 @@ namespace CertifyWeb.Server.Controllers
             //吊销证书
             //await acme.RevokeCertificate(certChain.Certificate.ToDer(), RevocationReason.KeyCompromise, privateKey);
 
+        }
+        /// <summary>
+        /// 获取Acme商户列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public CertificateAuthority[] GetCertificateAuthorities() => Certify.Models.CertificateAuthority.CoreCertificateAuthorities.ToArray();
+
+        private async Task<IDnsProvider> getDnsProviderAsync()
+        {
+            //var acmeCore = new AcmeCore();
+            var dnsAPIProvider = await AcmeCore.GetDnsProvider("DnsProviderAliyun",
+                new System.Collections.Generic.Dictionary<string, string> {
+                            {"accesskeyid","xx" },
+                            {"accesskeysecret","xx" }
+                },
+                new System.Collections.Generic.Dictionary<string, string> { }
+            );
+            return dnsAPIProvider;
+        }
+        private async Task<AcmeContext> getAcmeAsync()
+        {
+            //创建新的 ACME 帐户
+            //var _certificateAuthorities = Certify.Models.CertificateAuthority.CoreCertificateAuthorities;
+            ////Let's Encrypt
+            //var acme = new AcmeContext(WellKnownServers.LetsEncryptV2);
+            var acme = new AcmeContext(new Uri("https://acme-v02.api.letsencrypt.org/directory"));
+            var account = await acme.NewAccount("mccj@qq.com", true);
+            //ZeroSSL
+            //var acme = new AcmeContext(new Uri("https://acme.zerossl.com/v2/DV90"));
+            //var account = await acme.NewAccount("mccj@qq.com", true, "xx", "xx","");
+
+            //var acme = new AcmeContext(new Uri("https://acme.ssl.com/sslcom-dv-rsa"));
+            //var account = await acme.NewAccount("mccj@qq.com", true, "xx", "xx");
+
+            //var acme = new AcmeContext(new Uri("https://api.buypass.com/acme/directory"));
+            //var account = await acme.NewAccount("mccj@qq.com", true, "xx", "xx");
+
+            //var tos = await acme.TermsOfService();
+            //var account1 = await acme.Account();
+            //var accountInfo = await account.Resource();
+
+            // Save the account key for later use
+            var pemKey = acme.AccountKey.ToPem();
+            //var der = acme.AccountKey.ToDer();
+
+
+
+            //            //使用现有的 ACME 帐户
+            //            //// Load the saved account key
+            //            var pemKey = @"-----BEGIN EC PRIVATE KEY-----
+            //-----END EC PRIVATE KEY-----
+            //";
+            //            var accountKey = KeyFactory.FromPem(pemKey);
+            //            var acme = new AcmeContext(WellKnownServers.LetsEncryptStagingV2, accountKey);
+            //            var account = await acme.Account();
+
+            return acme;
+        }
+        private OrderInfo getOrder()
+        {
+            var authzDomain = "cluster.ink";
+            return new OrderInfo
+            {
+                IdentifierType = IdentifierType.Dns,
+                PrimaryDomain = authzDomain,
+                Domains = [
+                    authzDomain,
+                    "*." + authzDomain,
+                    //"k8s." + authzDomain ,
+                    "*.k8s." + authzDomain ,
+                    //"prd." + authzDomain ,
+                    "*.prd.k8s." + authzDomain ,
+                    //"dev." + authzDomain ,
+                    "*.dev.k8s." + authzDomain ,
+                    //"app." + authzDomain ,
+                    "*.app.k8s." + authzDomain ,
+                    //"dbs." + authzDomain ,
+                    "*.dbs.k8s." + authzDomain ,
+                    //"test." + authzDomain ,
+                    "*.test.k8s." + authzDomain
+                ],
+                //KeyType = ""
+            };
+
+
+        }
+        public class OrderInfo
+        {
+            public string PrimaryDomain { get; set; }
+            public string[] Domains { get; set; }
+            public IdentifierType IdentifierType { get; set; }
+            //public string KeyType { get; set; }
+            public string 备注 { get; set; }
         }
     }
 }

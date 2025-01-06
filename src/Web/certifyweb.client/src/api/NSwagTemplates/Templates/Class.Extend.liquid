@@ -1,0 +1,47 @@
+{% assign classNamePrefixXnRestfulResult = ClassName | slice : 0, 16 %}
+{% assign classNamePrefixXnPaged = ClassName | slice : 0, 8 %}
+
+{% if classNamePrefixXnRestfulResult != 'XnRestfulResult_' and classNamePrefixXnPaged != 'XnPaged_' -%}
+export const {{ ClassName }}Columns = {
+{% for property in Properties -%}
+    {{ property.PropertyName | capitalize }}: { dataIndex: '{{ property.PropertyName }}', title: '{% if property.HasDescription -%}{{ property.Description | escape_once | newline_to_br }}{% else -%}{{ property.PropertyName }}{% endif %}' },
+{% endfor -%}
+};
+
+/* 
+<a-form-model ref="formRef" :model="formState.ruleForm" :labelCol="{ xs: { span: 24 }, sm: { span: 5 } }" :wrapperCol="{ xs: { span: 24 }, sm: { span: 15 } }">
+{% for property in Properties -%}
+    <a-form-model-item label="{% if property.HasDescription -%}{{ property.Description }}{% else -%}{{ property.PropertyName }}{% endif %}" prop="{{ property.PropertyName }}" :rules="{ required: true, message: `请输入 {% if property.HasDescription -%}{{ property.Description }}{% else -%}{{ property.PropertyName }}{% endif %}！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 {% if property.HasDescription -%}{{ property.Description }}{% else -%}{{ property.PropertyName }}{% endif %}" v-model="formState.ruleForm.{{ property.PropertyName }}" allowClear />
+        <!-- 
+        // 文本
+        {% raw %}{{{% endraw %} {{ property.PropertyName }} ?? "-" {% raw %}}}{% endraw %}
+        // 文本域
+        <a-textarea placeholder="请输入 {% if property.HasDescription -%}{{ property.Description }}{% else -%}{{ property.PropertyName }}{% endif %}" v-model="formState.ruleForm.{{ property.PropertyName }}" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 {% if property.HasDescription -%}{{ property.Description }}{% else -%}{{ property.PropertyName }}{% endif %}" v-model="formState.ruleForm.{{ property.PropertyName }}" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 {% if property.HasDescription -%}{{ property.Description }}{% else -%}{{ property.PropertyName }}{% endif %}" v-model="formState.ruleForm.{{ property.PropertyName }}" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.{{ property.PropertyName }}">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.{{ property.PropertyName }}">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.{{ property.PropertyName }}" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.{{ property.PropertyName }}" allow-half />
+        -->
+    </a-form-model-item>
+{% endfor -%}
+</a-form-model>
+*/
+{% endif -%}   

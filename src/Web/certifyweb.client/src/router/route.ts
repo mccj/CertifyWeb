@@ -64,6 +64,14 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           icon: 'ele-Promotion',
         }
       },
+      {
+        path: '/acme/authority',
+        component: () => import('@/views/acme-certificate/acme-authority.vue'),
+        meta: {
+          title: '证书颁发机构',
+          icon: 'ele-Promotion',
+        }
+      },
     ],
   },
   {

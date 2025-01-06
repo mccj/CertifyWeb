@@ -1,0 +1,20 @@
+{% comment %} https://github.com/RicoSuter/NSwag/blob/master/src/NSwag.CodeGeneration.TypeScript/Templates/Client.Method.Documentation.liquid {% endcomment %}
+
+{% if operation.HasDocumentation -%}
+/**
+{%     if operation.HasSummary -%}
+ * {{ operation.Summary }}
+{%     endif -%}
+{%     for parameter in operation.Parameters -%}
+{%         if parameter.HasDescriptionOrIsOptional -%}
+ * @param {{ parameter.VariableName }}{% if parameter.IsOptional %} (optional){% endif %} {{ parameter.Description | replace: "\n", " " }}
+{%         endif -%}
+{%     endfor -%}
+{%     if operation.HasResultDescription -%}
+ * @return {{ operation.ResultDescription }}
+{%     endif -%}
+{%     if operation.IsDeprecated -%}
+ * @deprecated
+{%     endif -%}
+ */
+{%- endif %}

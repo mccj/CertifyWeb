@@ -1,0 +1,8 @@
+{% comment %} https://github.com/RicoSuter/NJsonSchema/blob/master/src/NJsonSchema.CodeGeneration.TypeScript/Templates/Enum.liquid {% endcomment %}
+
+{%- if HasDescription -%}
+/** {{ Description | strip_html | replace: "&nbsp;", " " }} */
+{%- endif -%}
+{%- if ExportTypes %}export {% endif %}type {{ Name }}String = {% for enumeration in Enums %}{%- if Enums.first.Value != enumeration.Value %} | {% endif %}"{{ enumeration.Name }}"{% endfor %}; 
+{% if ExportTypes %}export {% endif %}enum {{ Name }} { {%- for enumeration in Enums %} {{ enumeration.Name }} = {{ enumeration.Value }}{%- if Enums.last.Value != enumeration.Value %},{% endif %}{%- endfor %} }
+{% if ExportTypes %}export {% endif %}const {{ Name }}Descriptions = { {%- for enumeration in Enums %} {{ enumeration.Name }} : { Name: "{{enumeration.Name}}", Value: {{enumeration.Value}}, Title: "{{ ExtensionData['x-enumDescriptions'][forloop.index0] }}" }{%- if Enums.last.Value != enumeration.Value %},{% endif %}{%- endfor %} }

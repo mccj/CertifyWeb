@@ -1,0 +1,102 @@
+{% comment %} https://github.com/RicoSuter/NSwag/blob/master/src/NSwag.CodeGeneration.TypeScript/Templates/FetchClient.liquid {% endcomment %}
+{% if HasOperations -%}
+
+import { type AxiosRequestConfig, type AxiosInstance, type AxiosResponse } from 'axios'
+import { service as defaultRequest} from '@/utils/request'
+
+{% if ExportTypes %}export {% endif %}class {{ Class }} {
+    private httpRequest: <T = any>(config: AxiosRequestConfig) => Promise<AxiosResponse<T>>;
+    private baseUrl: string;
+
+{%- if HasExtendedConstructor == false -%}
+    constructor({% if HasConfigurationClass %}configuration: {{ ConfigurationClass }}, {% endif %}baseUrl?: string, requestInstance?: AxiosInstance) {
+        this.httpRequest = requestInstance ?? defaultRequest;
+{%-    if UseGetBaseUrlMethod -%}
+        this.baseUrl = this.getBaseUrl("{{ BaseUrl }}", baseUrl);
+{%-    else -%}
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "{{ BaseUrl }}";
+{%-    endif -%}
+    }
+{%- endif -%}
+{%- if HasExtensionCode -%}
+
+    {{ ExtensionCode }}
+{%- endif -%}
+{% for operation in Operations %}
+    {%- if operation.IsDeprecated %}{% continue %}{% endif -%}
+    {% template Client.Method.Documentation %}
+    {{ operation.MethodAccessModifier }}{{ operation.ActualOperationName | capitalize | replace: "_", "" }} = async ({% template FetchClient.Parameter %}) => {
+        {% template Client.RequestUrl %}
+
+{%-    if operation.HasBody and operation.ConsumesFormUrlEncoded == false -%}
+        {% template Client.RequestBody %}
+
+{%-    endif -%}
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "{{ operation.HttpMethodUpper | upcase }}",
+{%-    if operation.HasBody -%}
+            data: {% if operation.ConsumesFormUrlEncoded %}{{ operation.ContentParameter.VariableName }}{% else %}content_{% endif %},
+{%-    endif -%}
+{%-    if UseAbortSignal -%}
+            signal,
+{%-    endif -%}
+            headers: {
+{%-    for parameter in operation.HeaderParameters -%}
+                "{{ parameter.Name }}": {{ parameter.VariableName }} !== undefined && {{ parameter.VariableName }} !== null ? "" + {{ parameter.VariableName }} : "",
+{%-    endfor -%}
+{%-    if operation.HasContent or operation.ConsumesFormUrlEncoded -%}
+                "Content-Type": "{{ operation.Consumes }}",
+{%-    endif -%}
+{%-    if operation.HasResultType and operation.HasAcceptHeaderParameterParameter == false -%}
+                "Accept": "{{ operation.Produces }}"
+{%-    endif -%}
+            }
+        };
+
+        const response = await this.httpRequest<{{ operation.ResultType }}>(config);
+{%-    if operation.HasResultType -%}
+        return response?.data;
+{%-    endif -%}
+
+{% comment %}
+        // {{ operation }}
+        // ResultType = {{ operation.ResultType }}
+        // ActualOperationName = {{ operation.ActualOperationName }}
+        // ActualOperationNameUpper = {{ operation.ActualOperationNameUpper }}
+        // RequiresMappings = {{ operation.RequiresMappings }}
+        // SupportsStrictNullChecks = {{ operation.SupportsStrictNullChecks }}
+        // HandleReferences = {{ operation.HandleReferences }}
+        // ExceptionType = {{ operation.ExceptionType }}
+        // MethodAccessModifier = {{ operation.MethodAccessModifier }}
+        // ResponseClass = {{ operation.ResponseClass }}
+        // HasBody = {{ operation.HasBody }}
+        // WrapResponse = {{ operation.WrapResponse }}
+        // HasResultType = {{ operation.HasResultType }}
+        // Id = {{ operation.Id }}
+        // Path = {{ operation.Path }}
+        // HttpMethod = {{ operation.HttpMethod }}
+        // OperationName = {{ operation.OperationName }}
+        // HttpMethodUpper = {{ operation.HttpMethodUpper }}
+        // HttpMethodLower = {{ operation.HttpMethodLower }}
+        // UnwrappedResultType = {{ operation.UnwrappedResultType }}
+        // ResultDescription = {{ operation.ResultDescription }}
+        // ControllerName = {{ operation.ControllerName }}
+        // ExceptionType = {{ operation.ExceptionType }}
+{% endcomment %}
+    }
+{% endfor -%}
+}
+//#region 请求对象
+{%- for operation in Operations -%}
+{%- if operation.IsDeprecated %}{% continue %}{% endif -%}
+{%- assign parameterLength = operation.Parameters | size -%}
+{%-      if parameterLength > 1 -%}
+{% if operation.HasSummary %}/** {{ operation.Summary }} */{% endif %}
+export type {{ operation.ActualOperationName | capitalize | replace: "_", "" }}RequestType = { {% for parameter in operation.Parameters %}{{ parameter.VariableName }}{% if GenerateOptionalParameters and parameter.IsOptional %}?{% endif %}: {{ parameter.Type }}{{ parameter.TypePostfix }}{% if parameter.IsLast == false %}, {% endif %}{% endfor %}{% if UseAbortSignal %}{% if operation.Parameters.size > 0 %}, {% endif %}signal?: AbortSignal | undefined{% endif %} };
+{%-     endif -%}
+{%- endfor -%}
+{%- endif -%}
+//#endregion

@@ -1,0 +1,9 @@
+{% assign parameterLength = operation.Parameters | size %}
+
+{%- if parameterLength <= 1 -%}
+{% for parameter in operation.Parameters %}{{ parameter.VariableName }}{% if GenerateOptionalParameters and parameter.IsOptional %}?{% endif %}: {{ parameter.Type }}{{ parameter.TypePostfix }}{% if parameter.IsLast == false %}, {% endif %}{% endfor %}{% if UseAbortSignal %}{% if operation.Parameters.size > 0 %}, {% endif %}signal?: AbortSignal | undefined{%- endif -%}
+{% if parameterLength > 0%}, {% endif %}axiosConfig?: AxiosRequestConfig
+{%- else -%}
+{ {% for parameter in operation.Parameters %}{{ parameter.VariableName }}{% if parameter.IsLast == false %}, {% endif %}{% endfor %} }: {{ operation.ActualOperationName | capitalize | replace: "_", "" }}RequestType{{-""-}}
+{% if parameterLength > 0%}, {% endif %}axiosConfig?: AxiosRequestConfig
+{%- endif -%}
