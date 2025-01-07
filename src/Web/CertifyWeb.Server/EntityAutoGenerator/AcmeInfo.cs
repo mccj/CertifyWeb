@@ -15,6 +15,11 @@ namespace OneNetIotService.Server.EntityAutoGenerator;
 public interface AcmeInfo : BaseEntity<long>
 {
     /// <summary>
+    /// AcmeId
+    /// </summary>
+    [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
+    public string AcmeId { get; set; }
+    /// <summary>
     /// DirectoryUri
     /// </summary>
     [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
@@ -44,5 +49,10 @@ public interface AcmeInfo : BaseEntity<long>
     /// </summary>
     [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
     public string? EabKeyAlg { get; set; }
+    /// <summary>
+    /// 备注
+    /// </summary>
+    [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
+    public string? Description { get; set; }
 }
 

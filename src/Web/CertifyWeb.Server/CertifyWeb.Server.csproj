@@ -10,7 +10,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Certify.Providers\DNS\AcmeDns\AcmeDns\Plugin.DNS.AcmeDns.csproj" />
 		<ProjectReference Include="..\..\Certify.Providers\DNS\Aliyun\Plugin.DNS.Aliyun.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\AWSRoute53\Plugin.DNS.AWSRoute53.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\Azure\Plugin.DNS.Azure.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\CertifyDns\Plugin.DNS.CertifyDns.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\Cloudflare\Plugin.DNS.Cloudflare.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\DnsMadeEasy\Plugin.DNS.DnsMadeEasy.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\GoDaddy\Plugin.DNS.GoDaddy.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\IONOS\Plugin.DNS.IONOS.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\MSDNS\Plugin.DNS.MSDNS.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\NameCheap\Plugin.DNS.NameCheap.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\OVH\Plugin.DNS.OVH.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\SimpleDNSPlus\Plugin.DNS.SimpleDNSPlus.csproj" />
+		<ProjectReference Include="..\..\Certify.Providers\DNS\TransIP\Plugin.DNS.TransIP.csproj" />
 		<ProjectReference Include="..\certifyweb.client\certifyweb.client.esproj">
 			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
 		</ProjectReference>
