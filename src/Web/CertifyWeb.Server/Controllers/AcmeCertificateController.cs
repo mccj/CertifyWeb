@@ -12,12 +12,9 @@ namespace CertifyWeb.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class AcmeCertificateController : ControllerBase
+    public class AcmeCertificateController(ILogger<AcmeCertificateController> logger) : ControllerBase
     {
-        //private static readonly string[] Summaries = new[]
-        //{
-        //    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        //};
+        private readonly ILogger<AcmeCertificateController> _logger = logger;
 
         //private readonly ILogger<AcmeCertificateController> _logger;
 
@@ -215,11 +212,15 @@ namespace CertifyWeb.Server.Controllers
         /// <returns></returns>
         [HttpGet]
         public CertificateAuthority[] GetCertificateAuthorities() => Certify.Models.CertificateAuthority.CoreCertificateAuthorities.ToArray();
-
+        [HttpGet]
+        public async Task ddd()
+        {
+            var sss =await PluginManager.GetChallengeAPIProviders();
+            var fdf =await getDnsProviderAsync();
+        }
         private async Task<IDnsProvider> getDnsProviderAsync()
         {
-            //var acmeCore = new AcmeCore();
-            var dnsAPIProvider = await AcmeCore.GetDnsProvider("DnsProviderAliyun",
+            var dnsAPIProvider = await PluginManager.GetDnsProvider("DNS01.API.Aliyun",
                 new System.Collections.Generic.Dictionary<string, string> {
                             {"accesskeyid","xx" },
                             {"accesskeysecret","xx" }
