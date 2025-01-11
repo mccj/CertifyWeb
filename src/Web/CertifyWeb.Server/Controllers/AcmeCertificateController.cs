@@ -2,6 +2,7 @@ using Certify.ACME.Anvil;
 using Certify.ACME.Anvil.Acme;
 using Certify.ACME.Anvil.Acme.Resource;
 using Certify.Models;
+using Certify.Models.Config;
 using Certify.Models.Providers;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
@@ -16,24 +17,23 @@ namespace CertifyWeb.Server.Controllers
     {
         private readonly ILogger<AcmeCertificateController> _logger = logger;
 
-        //private readonly ILogger<AcmeCertificateController> _logger;
+        /// <summary>
+        /// 获取Acme商户列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public CertificateAuthority[] GetCertificateAuthorities() => Certify.Models.CertificateAuthority.CoreCertificateAuthorities.ToArray();
+        /// <summary>
+        /// 获取域名验证提供方式
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ChallengeProviderDefinition[]> GetChallengeProviders()
+        {
+            var challengeAPIProviders = await PluginManager.GetChallengeAPIProviders();
+            return challengeAPIProviders.ToArray();
+        }
 
-        //public AcmeCertificateController(ILogger<AcmeCertificateController> logger)
-        //{
-        //    _logger = logger;
-        //}
-
-        //[HttpGet]
-        //public IEnumerable<WeatherForecast> Get()
-        //{
-        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    {
-        //        Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-        //        TemperatureC = Random.Shared.Next(-20, 55),
-        //        Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //    })
-        //    .ToArray();
-        //}
         /// <summary>
         /// 申请证书
         /// </summary>
@@ -206,18 +206,7 @@ namespace CertifyWeb.Server.Controllers
             //await acme.RevokeCertificate(certChain.Certificate.ToDer(), RevocationReason.KeyCompromise, privateKey);
 
         }
-        /// <summary>
-        /// 获取Acme商户列表
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public CertificateAuthority[] GetCertificateAuthorities() => Certify.Models.CertificateAuthority.CoreCertificateAuthorities.ToArray();
-        [HttpGet]
-        public async Task ddd()
-        {
-            var sss =await PluginManager.GetChallengeAPIProviders();
-            var fdf =await getDnsProviderAsync();
-        }
+
         private async Task<IDnsProvider> getDnsProviderAsync()
         {
             var dnsAPIProvider = await PluginManager.GetDnsProvider("DNS01.API.Aliyun",
