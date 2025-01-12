@@ -12,7 +12,7 @@
       "className": "{controller}OpenApiGenerationClient",
       "generateOptionalParameters": true,
       "generateConstructorInterface": false,
-      "operationGenerationMode": "SingleClientFromOperationId",
+      "operationGenerationMode": "SingleClientFromPathSegments",
       "useLeafType": true,
       "templateDirectory": "./Templates/",
       "serviceHost": "172.29.0.12:7005",

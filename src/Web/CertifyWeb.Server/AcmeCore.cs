@@ -10,8 +10,9 @@ namespace TestProject1
 {
     public class PluginManager
     {
-         PluginManager() { }
-        static PluginManager() { 
+        PluginManager() { }
+        static PluginManager()
+        {
             CurrentInstance = new PluginManager();
             CurrentInstance.LoadPlugins(false);
         }
@@ -125,11 +126,12 @@ namespace TestProject1
         {
             DnsProviderProviders = new List<IDnsProviderProviderPlugin>();
 
-            // load core providers as plugins
-            var builtInProvider = new BuiltinDnsProviderProvider();//(IDnsProviderProviderPlugin)Activator.CreateInstance(Type.GetType("Certify.Core.Management.Challenges.ChallengeProviders+BuiltinDnsProviderProvider, Certify.Core"));
-            DnsProviderProviders.Add(builtInProvider);
+            //// load core providers as plugins
+            //var builtInProvider = new BuiltinDnsProviderProvider();//(IDnsProviderProviderPlugin)Activator.CreateInstance(Type.GetType("Certify.Core.Management.Challenges.ChallengeProviders+BuiltinDnsProviderProvider, Certify.Core"));
+            //DnsProviderProviders.Add(builtInProvider);
 
-            //var poshAcmeProvider = (IDnsProviderProviderPlugin)Activator.CreateInstance(Type.GetType("Certify.Core.Management.Challenges.DNS.DnsProviderPoshACME+PoshACMEDnsProviderProvider, Certify.Shared.Extensions"));
+            ////var poshAcmeProvider = (IDnsProviderProviderPlugin)Activator.CreateInstance(Type.GetType("Certify.Core.Management.Challenges.DNS.DnsProviderPoshACME+PoshACMEDnsProviderProvider, Certify.Shared.Extensions"));
+            //var poshAcmeProvider = new Certify.Core.Management.Challenges.DNS.DnsProviderPoshACME.PoshACMEDnsProviderProvider();
             //DnsProviderProviders.Add(poshAcmeProvider);
 
             var otherProviders = LoadPlugins<IDnsProviderProviderPlugin>("Plugin.DNS.*.dll", usePluginSubfolder: usePluginSubfolder);
@@ -711,33 +713,4 @@ namespace TestProject1
             }
         }
     }
-
-    //public class PoshACMEDnsProviderProvider : IDnsProviderProviderPlugin
-    //{
-
-    //    public IDnsProvider GetProvider(Type pluginType, string id)
-    //    {
-    //        foreach (var provider in ExtendedProviders)
-    //        {
-    //            if (provider.Id == id)
-    //            {
-    //                var appBasePath = AppContext.BaseDirectory;
-
-    //                var scriptPath = Path.Combine(new string[] { appBasePath, "Scripts", "DNS", "PoshACME" });
-
-    //                // TODO : move this out, shared config should be injected
-    //                var config = SharedUtils.ServiceConfigManager.GetAppServiceConfig();
-    //                return new DnsProviderPoshACME(scriptPath, config.PowershellExecutionPolicy) { DelegateProviderDefinition = provider };
-    //            }
-    //        }
-
-    //        return null;
-    //    }
-
-    //    public List<ChallengeProviderDefinition> GetProviders(Type pluginType)
-    //    {
-    //        return ExtendedProviders.ToList();
-    //    }
-    //}
-
 }

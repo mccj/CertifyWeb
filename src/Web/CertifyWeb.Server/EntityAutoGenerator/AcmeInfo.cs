@@ -29,11 +29,11 @@ public interface AcmeInfo : BaseEntity<long>
     /// </summary>
     [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
     public string Email { get; set; }
-    /// <summary>
-    /// TermsOfServiceAgreed
-    /// </summary>
-    [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
-    public bool? TermsOfServiceAgreed { get; set; }
+    ///// <summary>
+    ///// TermsOfServiceAgreed
+    ///// </summary>
+    //[AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
+    //public bool? TermsOfServiceAgreed { get; set; }
     /// <summary>
     /// EabKeyId
     /// </summary>

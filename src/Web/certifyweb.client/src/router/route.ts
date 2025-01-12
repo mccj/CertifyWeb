@@ -72,6 +72,14 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
           icon: 'ele-Promotion',
         }
       },
+      {
+        path: '/acme/challenge-providers',
+        component: () => import('@/views/acme-certificate/challenge-providers.vue'),
+        meta: {
+          title: '验证提供方式',
+          icon: 'ele-Promotion',
+        }
+      },
     ],
   },
   {
