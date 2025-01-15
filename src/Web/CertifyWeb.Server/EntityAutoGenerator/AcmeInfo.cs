@@ -43,7 +43,7 @@ public interface AcmeInfo : BaseEntity<long>
     /// EabKey
     /// </summary>
     [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
-    public string? EabKey { get; set; }
+    public string? EabHmacKey { get; set; }
     /// <summary>
     /// EabKeyAlg
     /// </summary>

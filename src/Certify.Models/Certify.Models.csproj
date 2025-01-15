@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.1</TargetFrameworks>
 		<RootNamespace>Certify</RootNamespace>
-		<LangVersion>10.0</LangVersion>
+		<LangVersion>11.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Description>Certify Certificate Manager API Models</Description>

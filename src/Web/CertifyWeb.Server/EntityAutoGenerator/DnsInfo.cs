@@ -19,15 +19,16 @@ public interface DnsInfo : BaseEntity<long>
     /// </summary>
     [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
     public string ProviderType { get; set; }
-    /// <summary>
-    /// Credentials
-    /// </summary>
-    [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
-    public Dictionary<string, string> Credentials { get; set; }
+    ///// <summary>
+    ///// Credentials
+    ///// </summary>
+    //[AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
+    //public Dictionary<string, string> Credentials { get; set; }
     /// <summary>
     /// Parameters
     /// </summary>
-    [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
+    [AutoCodeGenerator.AutoCodeProperty(Ids = [C.DtoId, C.SearchId])]
+    [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId], Attributes = ["SqlSugar.SugarColumn(IsJson = true)"])]
     public Dictionary<string, string> Parameters { get; set; }
     /// <summary>
     /// 备注
