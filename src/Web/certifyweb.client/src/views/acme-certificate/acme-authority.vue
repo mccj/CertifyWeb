@@ -6,12 +6,12 @@
         <el-descriptions-item label="网址">
           <el-link :href="item.websiteUrl" target="_blank">{{ item.websiteUrl }}</el-link>
         </el-descriptions-item>
-        <el-descriptions-item label="签发有效期">{{ item.standardExpiryDays }} 天</el-descriptions-item>
+        <el-descriptions-item label="有效期">{{ item.standardExpiryDays }} 天</el-descriptions-item>
         <el-descriptions-item label="签名功能">
           <template v-for="(item2, index2) in item.supportedFeatures" :key="index2">
             <el-tag type="info" v-if="item2 == 'DOMAIN_SINGLE'">单域名</el-tag>
             <el-tag type="info" v-else-if="item2 == 'DOMAIN_MULTIPLE_SAN'">多域名</el-tag>
-            <el-tag type="info" v-else-if="item2 == 'DOMAIN_WILDCARD'">通配符域名</el-tag>
+            <el-tag type="info" v-else-if="item2 == 'DOMAIN_WILDCARD'">泛域名</el-tag>
             <el-tag type="info" v-else>{{ item2 }}</el-tag>
           </template>
         </el-descriptions-item>

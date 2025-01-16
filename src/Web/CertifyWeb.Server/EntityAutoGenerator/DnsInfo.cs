@@ -19,6 +19,8 @@ public interface DnsInfo : BaseEntity<long>
     /// </summary>
     [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
     public string ProviderType { get; set; }
+       [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
+    public string ProviderTitle { get; set; } 
     ///// <summary>
     ///// Credentials
     ///// </summary>

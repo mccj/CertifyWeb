@@ -1,3 +1,4 @@
+using Certify.ACME.Anvil;
 using Certify.Models;
 using Certify.Models.Config;
 using Certify.Models.Plugins;
@@ -17,6 +18,13 @@ namespace TestProject1
             CurrentInstance.LoadPlugins(false);
         }
         public static PluginManager CurrentInstance { get; private set; }
+        public static IKey PemKey = KeyFactory.FromPem(@"
+            -----BEGIN EC PRIVATE KEY-----
+            MHcCAQEEIGWuCAtg4N0WlJ2UPXooBKdFWIr9v9LroE3iCZZYfZlzoAoGCCqGSM49
+            AwEHoUQDQgAEnI6InAF6yK3SDfwlyKrRalUxWp7DHOLBKwj9aFUQftpr7YAUBM1h
+            RzzSLxhiQGbGr3tGfS5PIFtALSRW2pWipA==
+            -----END EC PRIVATE KEY-----
+            ");
         public static async Task<List<ChallengeProviderDefinition>> GetChallengeAPIProviders()
         {
             var result = PluginManager.CurrentInstance.DnsProviderProviders.SelectMany(pp => pp.GetProviders(pp.GetType())).ToList();

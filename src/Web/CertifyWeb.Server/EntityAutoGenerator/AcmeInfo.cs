@@ -19,6 +19,8 @@ public interface AcmeInfo : BaseEntity<long>
     /// </summary>
     [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
     public string AcmeId { get; set; }
+    [AutoCodeGenerator.AutoCodeProperty(Ids = [C.EntityId, C.DtoId, C.SearchId])]
+    public string AcmeTitle { get; set; }
     /// <summary>
     /// DirectoryUri
     /// </summary>

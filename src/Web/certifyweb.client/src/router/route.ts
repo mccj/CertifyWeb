@@ -49,6 +49,14 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: '/acme/domain',
+        component: () => import('@/views/acme-certificate/domain.vue'),
+        meta: {
+          title: '域名',
+          icon: 'ele-Promotion',
+        }
+      },
+      {
         path: '/acme/dns',
         component: () => import('@/views/acme-certificate/dns.vue'),
         meta: {

@@ -86,6 +86,7 @@ export class OpenApiGenerationClient {
 
     /**
      * @param acmeId (optional) 
+     * @param acmeTitle (optional) 
      * @param directoryUri (optional) 
      * @param email (optional) 
      * @param eabKeyId (optional) 
@@ -94,12 +95,16 @@ export class OpenApiGenerationClient {
      * @param description (optional) 
      * @return OK
      */
-    ApiAcmeInfoGetList = async ({ acmeId, directoryUri, email, eabKeyId, eabHmacKey, eabKeyAlg, description }: ApiAcmeInfoGetListRequestType, axiosConfig?: AxiosRequestConfig) => {
+    ApiAcmeInfoGetList = async ({ acmeId, acmeTitle, directoryUri, email, eabKeyId, eabHmacKey, eabKeyAlg, description }: ApiAcmeInfoGetListRequestType, axiosConfig?: AxiosRequestConfig) => {
         let url_ = "/api/AcmeInfo/GetList?";
         if (acmeId === null)
             throw new Error("The parameter 'acmeId' cannot be null.");
         else if (acmeId !== undefined)
             url_ += "AcmeId=" + encodeURIComponent("" + acmeId) + "&";
+        if (acmeTitle === null)
+            throw new Error("The parameter 'acmeTitle' cannot be null.");
+        else if (acmeTitle !== undefined)
+            url_ += "AcmeTitle=" + encodeURIComponent("" + acmeTitle) + "&";
         if (directoryUri === null)
             throw new Error("The parameter 'directoryUri' cannot be null.");
         else if (directoryUri !== undefined)
@@ -143,6 +148,7 @@ export class OpenApiGenerationClient {
 
     /**
      * @param acmeId (optional) 
+     * @param acmeTitle (optional) 
      * @param directoryUri (optional) 
      * @param email (optional) 
      * @param eabKeyId (optional) 
@@ -153,12 +159,16 @@ export class OpenApiGenerationClient {
      * @param pageSize (optional) 
      * @return OK
      */
-    ApiAcmeInfoGetPage = async ({ acmeId, directoryUri, email, eabKeyId, eabHmacKey, eabKeyAlg, description, pageNo, pageSize }: ApiAcmeInfoGetPageRequestType, axiosConfig?: AxiosRequestConfig) => {
+    ApiAcmeInfoGetPage = async ({ acmeId, acmeTitle, directoryUri, email, eabKeyId, eabHmacKey, eabKeyAlg, description, pageNo, pageSize }: ApiAcmeInfoGetPageRequestType, axiosConfig?: AxiosRequestConfig) => {
         let url_ = "/api/AcmeInfo/GetPage?";
         if (acmeId === null)
             throw new Error("The parameter 'acmeId' cannot be null.");
         else if (acmeId !== undefined)
             url_ += "AcmeId=" + encodeURIComponent("" + acmeId) + "&";
+        if (acmeTitle === null)
+            throw new Error("The parameter 'acmeTitle' cannot be null.");
+        else if (acmeTitle !== undefined)
+            url_ += "AcmeTitle=" + encodeURIComponent("" + acmeTitle) + "&";
         if (directoryUri === null)
             throw new Error("The parameter 'directoryUri' cannot be null.");
         else if (directoryUri !== undefined)
@@ -224,7 +234,7 @@ export class OpenApiGenerationClient {
             method: "POST",
             data: content_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -250,7 +260,7 @@ export class OpenApiGenerationClient {
             method: "PUT",
             data: content_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -363,21 +373,21 @@ export class OpenApiGenerationClient {
 
     /**
      * @param providerType (optional) 
-     * @param credentials (optional) 
+     * @param providerTitle (optional) 
      * @param parameters (optional) 
      * @param description (optional) 
      * @return OK
      */
-    ApiDnsInfoGetList = async ({ providerType, credentials, parameters, description }: ApiDnsInfoGetListRequestType, axiosConfig?: AxiosRequestConfig) => {
+    ApiDnsInfoGetList = async ({ providerType, providerTitle, parameters, description }: ApiDnsInfoGetListRequestType, axiosConfig?: AxiosRequestConfig) => {
         let url_ = "/api/DnsInfo/GetList?";
         if (providerType === null)
             throw new Error("The parameter 'providerType' cannot be null.");
         else if (providerType !== undefined)
             url_ += "ProviderType=" + encodeURIComponent("" + providerType) + "&";
-        if (credentials === null)
-            throw new Error("The parameter 'credentials' cannot be null.");
-        else if (credentials !== undefined)
-            url_ += "Credentials=" + encodeURIComponent("" + credentials) + "&";
+        if (providerTitle === null)
+            throw new Error("The parameter 'providerTitle' cannot be null.");
+        else if (providerTitle !== undefined)
+            url_ += "ProviderTitle=" + encodeURIComponent("" + providerTitle) + "&";
         if (parameters === null)
             throw new Error("The parameter 'parameters' cannot be null.");
         else if (parameters !== undefined)
@@ -405,23 +415,23 @@ export class OpenApiGenerationClient {
 
     /**
      * @param providerType (optional) 
-     * @param credentials (optional) 
+     * @param providerTitle (optional) 
      * @param parameters (optional) 
      * @param description (optional) 
      * @param pageNo (optional) 
      * @param pageSize (optional) 
      * @return OK
      */
-    ApiDnsInfoGetPage = async ({ providerType, credentials, parameters, description, pageNo, pageSize }: ApiDnsInfoGetPageRequestType, axiosConfig?: AxiosRequestConfig) => {
+    ApiDnsInfoGetPage = async ({ providerType, providerTitle, parameters, description, pageNo, pageSize }: ApiDnsInfoGetPageRequestType, axiosConfig?: AxiosRequestConfig) => {
         let url_ = "/api/DnsInfo/GetPage?";
         if (providerType === null)
             throw new Error("The parameter 'providerType' cannot be null.");
         else if (providerType !== undefined)
             url_ += "ProviderType=" + encodeURIComponent("" + providerType) + "&";
-        if (credentials === null)
-            throw new Error("The parameter 'credentials' cannot be null.");
-        else if (credentials !== undefined)
-            url_ += "Credentials=" + encodeURIComponent("" + credentials) + "&";
+        if (providerTitle === null)
+            throw new Error("The parameter 'providerTitle' cannot be null.");
+        else if (providerTitle !== undefined)
+            url_ += "ProviderTitle=" + encodeURIComponent("" + providerTitle) + "&";
         if (parameters === null)
             throw new Error("The parameter 'parameters' cannot be null.");
         else if (parameters !== undefined)
@@ -471,7 +481,7 @@ export class OpenApiGenerationClient {
             method: "POST",
             data: content_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -497,7 +507,7 @@ export class OpenApiGenerationClient {
             method: "PUT",
             data: content_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -607,21 +617,675 @@ export class OpenApiGenerationClient {
         const response = await this.httpRequest<void>(config);
 
     }
+
+    /**
+     * @param primaryDomain (optional) 
+     * @param otherDomains (optional) 
+     * @param acmeId (optional) 
+     * @param description (optional) 
+     * @return OK
+     */
+    ApiDomainInfoGetList = async ({ primaryDomain, otherDomains, acmeId, description }: ApiDomainInfoGetListRequestType, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainInfo/GetList?";
+        if (primaryDomain === null)
+            throw new Error("The parameter 'primaryDomain' cannot be null.");
+        else if (primaryDomain !== undefined)
+            url_ += "PrimaryDomain=" + encodeURIComponent("" + primaryDomain) + "&";
+        if (otherDomains === null)
+            throw new Error("The parameter 'otherDomains' cannot be null.");
+        else if (otherDomains !== undefined)
+            url_ += "OtherDomains=" + encodeURIComponent("" + otherDomains) + "&";
+        if (acmeId === null)
+            throw new Error("The parameter 'acmeId' cannot be null.");
+        else if (acmeId !== undefined)
+            url_ += "AcmeId=" + encodeURIComponent("" + acmeId) + "&";
+        if (description === null)
+            throw new Error("The parameter 'description' cannot be null.");
+        else if (description !== undefined)
+            url_ += "Description=" + encodeURIComponent("" + description) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<DomainInfoDetailOutput[]>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @param primaryDomain (optional) 
+     * @param otherDomains (optional) 
+     * @param acmeId (optional) 
+     * @param description (optional) 
+     * @param pageNo (optional) 
+     * @param pageSize (optional) 
+     * @return OK
+     */
+    ApiDomainInfoGetPage = async ({ primaryDomain, otherDomains, acmeId, description, pageNo, pageSize }: ApiDomainInfoGetPageRequestType, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainInfo/GetPage?";
+        if (primaryDomain === null)
+            throw new Error("The parameter 'primaryDomain' cannot be null.");
+        else if (primaryDomain !== undefined)
+            url_ += "PrimaryDomain=" + encodeURIComponent("" + primaryDomain) + "&";
+        if (otherDomains === null)
+            throw new Error("The parameter 'otherDomains' cannot be null.");
+        else if (otherDomains !== undefined)
+            url_ += "OtherDomains=" + encodeURIComponent("" + otherDomains) + "&";
+        if (acmeId === null)
+            throw new Error("The parameter 'acmeId' cannot be null.");
+        else if (acmeId !== undefined)
+            url_ += "AcmeId=" + encodeURIComponent("" + acmeId) + "&";
+        if (description === null)
+            throw new Error("The parameter 'description' cannot be null.");
+        else if (description !== undefined)
+            url_ += "Description=" + encodeURIComponent("" + description) + "&";
+        if (pageNo === null)
+            throw new Error("The parameter 'pageNo' cannot be null.");
+        else if (pageNo !== undefined)
+            url_ += "pageNo=" + encodeURIComponent("" + pageNo) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<SqlSugarPagedListOfDomainInfoDetailOutput>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @return OK
+     */
+    ApiDomainInfoCreate = async (body: DomainInfoCreateInput, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainInfo/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "POST",
+            data: content_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<number>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @return OK
+     */
+    ApiDomainInfoUpdate = async (body: DomainInfoUpdateInput, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainInfo/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "PUT",
+            data: content_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<boolean>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    ApiDomainInfoDelete = async (id?: number | undefined, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainInfo/Delete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "DELETE",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<boolean>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @param ids (optional) 
+     * @return OK
+     */
+    ApiDomainInfoDeleteMany = async (ids?: number[] | undefined, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainInfo/DeleteMany?";
+        if (ids === null)
+            throw new Error("The parameter 'ids' cannot be null.");
+        else if (ids !== undefined)
+            ids && ids.forEach(item => { url_ += "ids=" + encodeURIComponent("" + item) + "&"; });
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "DELETE",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<boolean>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    ApiDomainInfoGetDetail = async (id?: number | undefined, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainInfo/GetDetail?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<DomainInfoDetailOutput>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @return OK
+     */
+    ApiDomainInfoInitTable = async (axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainInfo/InitTable";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "PATCH",
+            headers: {
+            }
+        };
+
+        const response = await this.httpRequest<void>(config);
+
+    }
+
+    /**
+     * @param acmeTitle (optional) 
+     * @param domains (optional) 
+     * @param directoryUri (optional) 
+     * @param orderUrl (optional) 
+     * @param orderExpires (optional) 
+     * @param orderStatus (optional) 
+     * @param description (optional) 
+     * @return OK
+     */
+    ApiDomainOrderGetList = async ({ acmeTitle, domains, directoryUri, orderUrl, orderExpires, orderStatus, description }: ApiDomainOrderGetListRequestType, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainOrder/GetList?";
+        if (acmeTitle === null)
+            throw new Error("The parameter 'acmeTitle' cannot be null.");
+        else if (acmeTitle !== undefined)
+            url_ += "AcmeTitle=" + encodeURIComponent("" + acmeTitle) + "&";
+        if (domains === null)
+            throw new Error("The parameter 'domains' cannot be null.");
+        else if (domains !== undefined)
+            url_ += "Domains=" + encodeURIComponent("" + domains) + "&";
+        if (directoryUri === null)
+            throw new Error("The parameter 'directoryUri' cannot be null.");
+        else if (directoryUri !== undefined)
+            url_ += "DirectoryUri=" + encodeURIComponent("" + directoryUri) + "&";
+        if (orderUrl === null)
+            throw new Error("The parameter 'orderUrl' cannot be null.");
+        else if (orderUrl !== undefined)
+            url_ += "OrderUrl=" + encodeURIComponent("" + orderUrl) + "&";
+        if (orderExpires === null)
+            throw new Error("The parameter 'orderExpires' cannot be null.");
+        else if (orderExpires !== undefined)
+            url_ += "OrderExpires=" + encodeURIComponent(orderExpires ? "" + orderExpires.toISOString() : "") + "&";
+        if (orderStatus === null)
+            throw new Error("The parameter 'orderStatus' cannot be null.");
+        else if (orderStatus !== undefined)
+            url_ += "OrderStatus=" + encodeURIComponent("" + orderStatus) + "&";
+        if (description === null)
+            throw new Error("The parameter 'description' cannot be null.");
+        else if (description !== undefined)
+            url_ += "Description=" + encodeURIComponent("" + description) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<DomainOrderDetailOutput[]>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @param acmeTitle (optional) 
+     * @param domains (optional) 
+     * @param directoryUri (optional) 
+     * @param orderUrl (optional) 
+     * @param orderExpires (optional) 
+     * @param orderStatus (optional) 
+     * @param description (optional) 
+     * @param pageNo (optional) 
+     * @param pageSize (optional) 
+     * @return OK
+     */
+    ApiDomainOrderGetPage = async ({ acmeTitle, domains, directoryUri, orderUrl, orderExpires, orderStatus, description, pageNo, pageSize }: ApiDomainOrderGetPageRequestType, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainOrder/GetPage?";
+        if (acmeTitle === null)
+            throw new Error("The parameter 'acmeTitle' cannot be null.");
+        else if (acmeTitle !== undefined)
+            url_ += "AcmeTitle=" + encodeURIComponent("" + acmeTitle) + "&";
+        if (domains === null)
+            throw new Error("The parameter 'domains' cannot be null.");
+        else if (domains !== undefined)
+            url_ += "Domains=" + encodeURIComponent("" + domains) + "&";
+        if (directoryUri === null)
+            throw new Error("The parameter 'directoryUri' cannot be null.");
+        else if (directoryUri !== undefined)
+            url_ += "DirectoryUri=" + encodeURIComponent("" + directoryUri) + "&";
+        if (orderUrl === null)
+            throw new Error("The parameter 'orderUrl' cannot be null.");
+        else if (orderUrl !== undefined)
+            url_ += "OrderUrl=" + encodeURIComponent("" + orderUrl) + "&";
+        if (orderExpires === null)
+            throw new Error("The parameter 'orderExpires' cannot be null.");
+        else if (orderExpires !== undefined)
+            url_ += "OrderExpires=" + encodeURIComponent(orderExpires ? "" + orderExpires.toISOString() : "") + "&";
+        if (orderStatus === null)
+            throw new Error("The parameter 'orderStatus' cannot be null.");
+        else if (orderStatus !== undefined)
+            url_ += "OrderStatus=" + encodeURIComponent("" + orderStatus) + "&";
+        if (description === null)
+            throw new Error("The parameter 'description' cannot be null.");
+        else if (description !== undefined)
+            url_ += "Description=" + encodeURIComponent("" + description) + "&";
+        if (pageNo === null)
+            throw new Error("The parameter 'pageNo' cannot be null.");
+        else if (pageNo !== undefined)
+            url_ += "pageNo=" + encodeURIComponent("" + pageNo) + "&";
+        if (pageSize === null)
+            throw new Error("The parameter 'pageSize' cannot be null.");
+        else if (pageSize !== undefined)
+            url_ += "pageSize=" + encodeURIComponent("" + pageSize) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<SqlSugarPagedListOfDomainOrderDetailOutput>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @return OK
+     */
+    ApiDomainOrderCreate = async (body: DomainOrderCreateInput, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainOrder/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "POST",
+            data: content_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<number>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @return OK
+     */
+    ApiDomainOrderUpdate = async (body: DomainOrderUpdateInput, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainOrder/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "PUT",
+            data: content_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<boolean>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    ApiDomainOrderDelete = async (id?: number | undefined, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainOrder/Delete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "DELETE",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<boolean>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @param ids (optional) 
+     * @return OK
+     */
+    ApiDomainOrderDeleteMany = async (ids?: number[] | undefined, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainOrder/DeleteMany?";
+        if (ids === null)
+            throw new Error("The parameter 'ids' cannot be null.");
+        else if (ids !== undefined)
+            ids && ids.forEach(item => { url_ += "ids=" + encodeURIComponent("" + item) + "&"; });
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "DELETE",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<boolean>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    ApiDomainOrderGetDetail = async (id?: number | undefined, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainOrder/GetDetail?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<DomainOrderDetailOutput>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @return OK
+     */
+    ApiDomainOrderInitTable = async (axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/DomainOrder/InitTable";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "PATCH",
+            headers: {
+            }
+        };
+
+        const response = await this.httpRequest<void>(config);
+
+    }
+
+    /**
+     * @param acmeId (optional) 
+     * @param domains (optional) 
+     * @param description (optional) 
+     * @return OK
+     */
+    ApiRequestDomainCreateDomainOrder = async ({ acmeId, domains, description }: ApiRequestDomainCreateDomainOrderRequestType, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/RequestDomain/CreateDomainOrder?";
+        if (acmeId === null)
+            throw new Error("The parameter 'acmeId' cannot be null.");
+        else if (acmeId !== undefined)
+            url_ += "acmeId=" + encodeURIComponent("" + acmeId) + "&";
+        if (domains === null)
+            throw new Error("The parameter 'domains' cannot be null.");
+        else if (domains !== undefined)
+            url_ += "domains=" + encodeURIComponent("" + domains) + "&";
+        if (description === null)
+            throw new Error("The parameter 'description' cannot be null.");
+        else if (description !== undefined)
+            url_ += "description=" + encodeURIComponent("" + description) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "POST",
+            headers: {
+            }
+        };
+
+        const response = await this.httpRequest<void>(config);
+
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    ApiRequestDomainGetDomainOrderAuthorizations = async (id?: number | undefined, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/RequestDomain/GetDomainOrderAuthorizations?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "POST",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        const response = await this.httpRequest<any[]>(config);
+        return response?.data;
+
+    }
+
+    /**
+     * @param directoryUri (optional) 
+     * @param authUrl (optional) 
+     * @return OK
+     */
+    ApiRequestDomainGetDomainOrderAuthValidate = async ({ directoryUri, authUrl }: ApiRequestDomainGetDomainOrderAuthValidateRequestType, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/RequestDomain/GetDomainOrderAuthValidate?";
+        if (directoryUri === null)
+            throw new Error("The parameter 'directoryUri' cannot be null.");
+        else if (directoryUri !== undefined)
+            url_ += "directoryUri=" + encodeURIComponent("" + directoryUri) + "&";
+        if (authUrl === null)
+            throw new Error("The parameter 'authUrl' cannot be null.");
+        else if (authUrl !== undefined)
+            url_ += "authUrl=" + encodeURIComponent("" + authUrl) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "POST",
+            headers: {
+            }
+        };
+
+        const response = await this.httpRequest<void>(config);
+
+    }
+
+    /**
+     * @param id (optional) 
+     * @return OK
+     */
+    ApiRequestDomainDownloadCertificate = async (id?: number | undefined, axiosConfig?: AxiosRequestConfig) => {
+        let url_ = "/api/RequestDomain/DownloadCertificate?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let config: AxiosRequestConfig = {
+            ...axiosConfig,
+            url: url_,
+            baseURL: this.baseUrl,
+            method: "POST",
+            headers: {
+            }
+        };
+
+        const response = await this.httpRequest<void>(config);
+
+    }
 }
 //#region 请求对象
 
-export type ApiAcmeInfoGetListRequestType = { acmeId?: string | undefined, directoryUri?: string | undefined, email?: string | undefined, eabKeyId?: string | undefined, eabHmacKey?: string | undefined, eabKeyAlg?: string | undefined, description?: string | undefined };
+export type ApiAcmeInfoGetListRequestType = { acmeId?: string | undefined, acmeTitle?: string | undefined, directoryUri?: string | undefined, email?: string | undefined, eabKeyId?: string | undefined, eabHmacKey?: string | undefined, eabKeyAlg?: string | undefined, description?: string | undefined };
 
-export type ApiAcmeInfoGetPageRequestType = { acmeId?: string | undefined, directoryUri?: string | undefined, email?: string | undefined, eabKeyId?: string | undefined, eabHmacKey?: string | undefined, eabKeyAlg?: string | undefined, description?: string | undefined, pageNo?: number | undefined, pageSize?: number | undefined };
+export type ApiAcmeInfoGetPageRequestType = { acmeId?: string | undefined, acmeTitle?: string | undefined, directoryUri?: string | undefined, email?: string | undefined, eabKeyId?: string | undefined, eabHmacKey?: string | undefined, eabKeyAlg?: string | undefined, description?: string | undefined, pageNo?: number | undefined, pageSize?: number | undefined };
 
-export type ApiDnsInfoGetListRequestType = { providerType?: string | undefined, credentials?: { [key: string]: string; } | undefined, parameters?: { [key: string]: string; } | undefined, description?: string | undefined };
+export type ApiDnsInfoGetListRequestType = { providerType?: string | undefined, providerTitle?: string | undefined, parameters?: { [key: string]: string; } | undefined, description?: string | undefined };
 
-export type ApiDnsInfoGetPageRequestType = { providerType?: string | undefined, credentials?: { [key: string]: string; } | undefined, parameters?: { [key: string]: string; } | undefined, description?: string | undefined, pageNo?: number | undefined, pageSize?: number | undefined };
+export type ApiDnsInfoGetPageRequestType = { providerType?: string | undefined, providerTitle?: string | undefined, parameters?: { [key: string]: string; } | undefined, description?: string | undefined, pageNo?: number | undefined, pageSize?: number | undefined };
+
+export type ApiDomainInfoGetListRequestType = { primaryDomain?: string | undefined, otherDomains?: string | undefined, acmeId?: number | undefined, description?: string | undefined };
+
+export type ApiDomainInfoGetPageRequestType = { primaryDomain?: string | undefined, otherDomains?: string | undefined, acmeId?: number | undefined, description?: string | undefined, pageNo?: number | undefined, pageSize?: number | undefined };
+
+export type ApiDomainOrderGetListRequestType = { acmeTitle?: string | undefined, domains?: string | undefined, directoryUri?: string | undefined, orderUrl?: string | undefined, orderExpires?: Date | undefined, orderStatus?: string | undefined, description?: string | undefined };
+
+export type ApiDomainOrderGetPageRequestType = { acmeTitle?: string | undefined, domains?: string | undefined, directoryUri?: string | undefined, orderUrl?: string | undefined, orderExpires?: Date | undefined, orderStatus?: string | undefined, description?: string | undefined, pageNo?: number | undefined, pageSize?: number | undefined };
+
+export type ApiRequestDomainCreateDomainOrderRequestType = { acmeId?: number | undefined, domains?: string | undefined, description?: string | undefined };
+
+export type ApiRequestDomainGetDomainOrderAuthValidateRequestType = { directoryUri?: string | undefined, authUrl?: string | undefined };
 //#endregion
 
 //#region AcmeInfoCreateInput 模型
 export class AcmeInfoCreateInput {
     acmeId?: string;
+    acmeTitle?: string;
     directoryUri?: string;
     email?: string;
     eabKeyId?: string | undefined;
@@ -633,6 +1297,7 @@ export class AcmeInfoCreateInput {
 
 export const AcmeInfoCreateInputColumns = {
     AcmeId: { dataIndex: 'acmeId', title: 'acmeId' },
+    AcmeTitle: { dataIndex: 'acmeTitle', title: 'acmeTitle' },
     DirectoryUri: { dataIndex: 'directoryUri', title: 'directoryUri' },
     Email: { dataIndex: 'email', title: 'email' },
     EabKeyId: { dataIndex: 'eabKeyId', title: 'eabKeyId' },
@@ -671,6 +1336,36 @@ export const AcmeInfoCreateInputColumns = {
         <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeId" />
         // 评分
         <a-rate v-model="formState.ruleForm.acmeId" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="acmeTitle" prop="acmeTitle" :rules="{ required: true, message: `请输入 acmeTitle！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear />
+        <!-- 
+        // 文本
+        {{ acmeTitle ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.acmeTitle">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.acmeTitle">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeTitle" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.acmeTitle" allow-half />
         -->
     </a-form-model-item>
     <a-form-model-item label="directoryUri" prop="directoryUri" :rules="{ required: true, message: `请输入 directoryUri！`, trigger: 'blur' }" has-feedback>
@@ -862,6 +1557,7 @@ export const AcmeInfoCreateInputColumns = {
 export class AcmeInfoDetailOutput {
     id?: number;
     acmeId?: string;
+    acmeTitle?: string;
     directoryUri?: string;
     email?: string;
     eabKeyId?: string | undefined;
@@ -874,6 +1570,7 @@ export class AcmeInfoDetailOutput {
 export const AcmeInfoDetailOutputColumns = {
     Id: { dataIndex: 'id', title: 'id' },
     AcmeId: { dataIndex: 'acmeId', title: 'acmeId' },
+    AcmeTitle: { dataIndex: 'acmeTitle', title: 'acmeTitle' },
     DirectoryUri: { dataIndex: 'directoryUri', title: 'directoryUri' },
     Email: { dataIndex: 'email', title: 'email' },
     EabKeyId: { dataIndex: 'eabKeyId', title: 'eabKeyId' },
@@ -942,6 +1639,36 @@ export const AcmeInfoDetailOutputColumns = {
         <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeId" />
         // 评分
         <a-rate v-model="formState.ruleForm.acmeId" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="acmeTitle" prop="acmeTitle" :rules="{ required: true, message: `请输入 acmeTitle！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear />
+        <!-- 
+        // 文本
+        {{ acmeTitle ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.acmeTitle">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.acmeTitle">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeTitle" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.acmeTitle" allow-half />
         -->
     </a-form-model-item>
     <a-form-model-item label="directoryUri" prop="directoryUri" :rules="{ required: true, message: `请输入 directoryUri！`, trigger: 'blur' }" has-feedback>
@@ -1133,6 +1860,7 @@ export const AcmeInfoDetailOutputColumns = {
 export class AcmeInfoUpdateInput {
     id?: number;
     acmeId?: string;
+    acmeTitle?: string;
     directoryUri?: string;
     email?: string;
     eabKeyId?: string | undefined;
@@ -1145,6 +1873,7 @@ export class AcmeInfoUpdateInput {
 export const AcmeInfoUpdateInputColumns = {
     Id: { dataIndex: 'id', title: 'id' },
     AcmeId: { dataIndex: 'acmeId', title: 'acmeId' },
+    AcmeTitle: { dataIndex: 'acmeTitle', title: 'acmeTitle' },
     DirectoryUri: { dataIndex: 'directoryUri', title: 'directoryUri' },
     Email: { dataIndex: 'email', title: 'email' },
     EabKeyId: { dataIndex: 'eabKeyId', title: 'eabKeyId' },
@@ -1213,6 +1942,36 @@ export const AcmeInfoUpdateInputColumns = {
         <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeId" />
         // 评分
         <a-rate v-model="formState.ruleForm.acmeId" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="acmeTitle" prop="acmeTitle" :rules="{ required: true, message: `请输入 acmeTitle！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear />
+        <!-- 
+        // 文本
+        {{ acmeTitle ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.acmeTitle">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.acmeTitle">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeTitle" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.acmeTitle" allow-half />
         -->
     </a-form-model-item>
     <a-form-model-item label="directoryUri" prop="directoryUri" :rules="{ required: true, message: `请输入 directoryUri！`, trigger: 'blur' }" has-feedback>
@@ -1402,7 +2161,7 @@ export const AcmeInfoUpdateInputColumns = {
 
 //#region CertificateAuthority 模型
 export class CertificateAuthority {
-    id?: string;
+    id?: string | undefined;
     apiType?: string;
     supportedFeatures?: string[];
     title?: string;
@@ -2713,7 +3472,7 @@ export const ChallengeProviderDefinitionColumns = {
 //#region DnsInfoCreateInput 模型
 export class DnsInfoCreateInput {
     providerType?: string;
-    credentials?: { [key: string]: string; };
+    providerTitle?: string;
     parameters?: { [key: string]: string; };
     description?: string | undefined;
     [key: string]: any;
@@ -2721,7 +3480,7 @@ export class DnsInfoCreateInput {
 
 export const DnsInfoCreateInputColumns = {
     ProviderType: { dataIndex: 'providerType', title: 'providerType' },
-    Credentials: { dataIndex: 'credentials', title: 'credentials' },
+    ProviderTitle: { dataIndex: 'providerTitle', title: 'providerTitle' },
     Parameters: { dataIndex: 'parameters', title: 'parameters' },
     Description: { dataIndex: 'description', title: 'description' },
 };
@@ -2758,34 +3517,34 @@ export const DnsInfoCreateInputColumns = {
         <a-rate v-model="formState.ruleForm.providerType" allow-half />
         -->
     </a-form-model-item>
-    <a-form-model-item label="credentials" prop="credentials" :rules="{ required: true, message: `请输入 credentials！`, trigger: 'blur' }" has-feedback>
-        <a-input placeholder="请输入 credentials" v-model="formState.ruleForm.credentials" allowClear />
+    <a-form-model-item label="providerTitle" prop="providerTitle" :rules="{ required: true, message: `请输入 providerTitle！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear />
         <!-- 
         // 文本
-        {{ credentials ?? "-" }}
+        {{ providerTitle ?? "-" }}
         // 文本域
-        <a-textarea placeholder="请输入 credentials" v-model="formState.ruleForm.credentials" allowClear show-count :rows="4" />
+        <a-textarea placeholder="请输入 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear show-count :rows="4" />
         // 日期选择框
-        <a-date-picker placeholder="请选择 credentials" v-model="formState.ruleForm.credentials" allowClear style="width: 100%;" />
+        <a-date-picker placeholder="请选择 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear style="width: 100%;" />
         // 下拉选择框
-        <a-select placeholder="请选择 credentials" v-model="formState.ruleForm.credentials" allowClear>
+        <a-select placeholder="请选择 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear>
             <a-select-option value="A" key="A">test</a-select-option>
             <a-select-option value="B" key="B">test</a-select-option>
         </a-select>
         // 单选框
-        <a-radio-group v-model="formState.ruleForm.credentials">
+        <a-radio-group v-model="formState.ruleForm.providerTitle">
             <a-radio-button value="A">A</a-radio-button>
             <a-radio-button value="B">B</a-radio-button>
         </a-radio-group>
         // 复选框
-        <a-checkbox-group v-model="formState.ruleForm.credentials">
+        <a-checkbox-group v-model="formState.ruleForm.providerTitle">
             <a-checkbox value="A">A</a-checkbox>
             <a-checkbox value="B">B</a-checkbox>
         </a-checkbox-group>
         // 开关
-        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.credentials" />
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.providerTitle" />
         // 评分
-        <a-rate v-model="formState.ruleForm.credentials" allow-half />
+        <a-rate v-model="formState.ruleForm.providerTitle" allow-half />
         -->
     </a-form-model-item>
     <a-form-model-item label="parameters" prop="parameters" :rules="{ required: true, message: `请输入 parameters！`, trigger: 'blur' }" has-feedback>
@@ -2857,7 +3616,7 @@ export const DnsInfoCreateInputColumns = {
 export class DnsInfoDetailOutput {
     id?: number;
     providerType?: string;
-    credentials?: { [key: string]: string; };
+    providerTitle?: string;
     parameters?: { [key: string]: string; };
     description?: string | undefined;
     [key: string]: any;
@@ -2866,7 +3625,7 @@ export class DnsInfoDetailOutput {
 export const DnsInfoDetailOutputColumns = {
     Id: { dataIndex: 'id', title: 'id' },
     ProviderType: { dataIndex: 'providerType', title: 'providerType' },
-    Credentials: { dataIndex: 'credentials', title: 'credentials' },
+    ProviderTitle: { dataIndex: 'providerTitle', title: 'providerTitle' },
     Parameters: { dataIndex: 'parameters', title: 'parameters' },
     Description: { dataIndex: 'description', title: 'description' },
 };
@@ -2933,34 +3692,34 @@ export const DnsInfoDetailOutputColumns = {
         <a-rate v-model="formState.ruleForm.providerType" allow-half />
         -->
     </a-form-model-item>
-    <a-form-model-item label="credentials" prop="credentials" :rules="{ required: true, message: `请输入 credentials！`, trigger: 'blur' }" has-feedback>
-        <a-input placeholder="请输入 credentials" v-model="formState.ruleForm.credentials" allowClear />
+    <a-form-model-item label="providerTitle" prop="providerTitle" :rules="{ required: true, message: `请输入 providerTitle！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear />
         <!-- 
         // 文本
-        {{ credentials ?? "-" }}
+        {{ providerTitle ?? "-" }}
         // 文本域
-        <a-textarea placeholder="请输入 credentials" v-model="formState.ruleForm.credentials" allowClear show-count :rows="4" />
+        <a-textarea placeholder="请输入 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear show-count :rows="4" />
         // 日期选择框
-        <a-date-picker placeholder="请选择 credentials" v-model="formState.ruleForm.credentials" allowClear style="width: 100%;" />
+        <a-date-picker placeholder="请选择 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear style="width: 100%;" />
         // 下拉选择框
-        <a-select placeholder="请选择 credentials" v-model="formState.ruleForm.credentials" allowClear>
+        <a-select placeholder="请选择 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear>
             <a-select-option value="A" key="A">test</a-select-option>
             <a-select-option value="B" key="B">test</a-select-option>
         </a-select>
         // 单选框
-        <a-radio-group v-model="formState.ruleForm.credentials">
+        <a-radio-group v-model="formState.ruleForm.providerTitle">
             <a-radio-button value="A">A</a-radio-button>
             <a-radio-button value="B">B</a-radio-button>
         </a-radio-group>
         // 复选框
-        <a-checkbox-group v-model="formState.ruleForm.credentials">
+        <a-checkbox-group v-model="formState.ruleForm.providerTitle">
             <a-checkbox value="A">A</a-checkbox>
             <a-checkbox value="B">B</a-checkbox>
         </a-checkbox-group>
         // 开关
-        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.credentials" />
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.providerTitle" />
         // 评分
-        <a-rate v-model="formState.ruleForm.credentials" allow-half />
+        <a-rate v-model="formState.ruleForm.providerTitle" allow-half />
         -->
     </a-form-model-item>
     <a-form-model-item label="parameters" prop="parameters" :rules="{ required: true, message: `请输入 parameters！`, trigger: 'blur' }" has-feedback>
@@ -3032,7 +3791,7 @@ export const DnsInfoDetailOutputColumns = {
 export class DnsInfoUpdateInput {
     id?: number;
     providerType?: string;
-    credentials?: { [key: string]: string; };
+    providerTitle?: string;
     parameters?: { [key: string]: string; };
     description?: string | undefined;
     [key: string]: any;
@@ -3041,7 +3800,7 @@ export class DnsInfoUpdateInput {
 export const DnsInfoUpdateInputColumns = {
     Id: { dataIndex: 'id', title: 'id' },
     ProviderType: { dataIndex: 'providerType', title: 'providerType' },
-    Credentials: { dataIndex: 'credentials', title: 'credentials' },
+    ProviderTitle: { dataIndex: 'providerTitle', title: 'providerTitle' },
     Parameters: { dataIndex: 'parameters', title: 'parameters' },
     Description: { dataIndex: 'description', title: 'description' },
 };
@@ -3108,34 +3867,34 @@ export const DnsInfoUpdateInputColumns = {
         <a-rate v-model="formState.ruleForm.providerType" allow-half />
         -->
     </a-form-model-item>
-    <a-form-model-item label="credentials" prop="credentials" :rules="{ required: true, message: `请输入 credentials！`, trigger: 'blur' }" has-feedback>
-        <a-input placeholder="请输入 credentials" v-model="formState.ruleForm.credentials" allowClear />
+    <a-form-model-item label="providerTitle" prop="providerTitle" :rules="{ required: true, message: `请输入 providerTitle！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear />
         <!-- 
         // 文本
-        {{ credentials ?? "-" }}
+        {{ providerTitle ?? "-" }}
         // 文本域
-        <a-textarea placeholder="请输入 credentials" v-model="formState.ruleForm.credentials" allowClear show-count :rows="4" />
+        <a-textarea placeholder="请输入 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear show-count :rows="4" />
         // 日期选择框
-        <a-date-picker placeholder="请选择 credentials" v-model="formState.ruleForm.credentials" allowClear style="width: 100%;" />
+        <a-date-picker placeholder="请选择 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear style="width: 100%;" />
         // 下拉选择框
-        <a-select placeholder="请选择 credentials" v-model="formState.ruleForm.credentials" allowClear>
+        <a-select placeholder="请选择 providerTitle" v-model="formState.ruleForm.providerTitle" allowClear>
             <a-select-option value="A" key="A">test</a-select-option>
             <a-select-option value="B" key="B">test</a-select-option>
         </a-select>
         // 单选框
-        <a-radio-group v-model="formState.ruleForm.credentials">
+        <a-radio-group v-model="formState.ruleForm.providerTitle">
             <a-radio-button value="A">A</a-radio-button>
             <a-radio-button value="B">B</a-radio-button>
         </a-radio-group>
         // 复选框
-        <a-checkbox-group v-model="formState.ruleForm.credentials">
+        <a-checkbox-group v-model="formState.ruleForm.providerTitle">
             <a-checkbox value="A">A</a-checkbox>
             <a-checkbox value="B">B</a-checkbox>
         </a-checkbox-group>
         // 开关
-        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.credentials" />
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.providerTitle" />
         // 评分
-        <a-rate v-model="formState.ruleForm.credentials" allow-half />
+        <a-rate v-model="formState.ruleForm.providerTitle" allow-half />
         -->
     </a-form-model-item>
     <a-form-model-item label="parameters" prop="parameters" :rules="{ required: true, message: `请输入 parameters！`, trigger: 'blur' }" has-feedback>
@@ -3166,6 +3925,1280 @@ export const DnsInfoUpdateInputColumns = {
         <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.parameters" />
         // 评分
         <a-rate v-model="formState.ruleForm.parameters" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="description" prop="description" :rules="{ required: true, message: `请输入 description！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear />
+        <!-- 
+        // 文本
+        {{ description ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.description">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.description">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.description" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.description" allow-half />
+        -->
+    </a-form-model-item>
+</a-form-model>
+*/
+
+//#endregion
+
+//#region DomainInfoCreateInput 模型
+export class DomainInfoCreateInput {
+    primaryDomain?: string;
+    otherDomains?: string | undefined;
+    acmeId?: number;
+    description?: string | undefined;
+    [key: string]: any;
+}
+
+export const DomainInfoCreateInputColumns = {
+    PrimaryDomain: { dataIndex: 'primaryDomain', title: 'primaryDomain' },
+    OtherDomains: { dataIndex: 'otherDomains', title: 'otherDomains' },
+    AcmeId: { dataIndex: 'acmeId', title: 'acmeId' },
+    Description: { dataIndex: 'description', title: 'description' },
+};
+
+/* 
+<a-form-model ref="formRef" :model="formState.ruleForm" :labelCol="{ xs: { span: 24 }, sm: { span: 5 } }" :wrapperCol="{ xs: { span: 24 }, sm: { span: 15 } }">
+    <a-form-model-item label="primaryDomain" prop="primaryDomain" :rules="{ required: true, message: `请输入 primaryDomain！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear />
+        <!-- 
+        // 文本
+        {{ primaryDomain ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.primaryDomain">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.primaryDomain">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.primaryDomain" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.primaryDomain" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="otherDomains" prop="otherDomains" :rules="{ required: true, message: `请输入 otherDomains！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear />
+        <!-- 
+        // 文本
+        {{ otherDomains ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.otherDomains">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.otherDomains">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.otherDomains" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.otherDomains" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="acmeId" prop="acmeId" :rules="{ required: true, message: `请输入 acmeId！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 acmeId" v-model="formState.ruleForm.acmeId" allowClear />
+        <!-- 
+        // 文本
+        {{ acmeId ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 acmeId" v-model="formState.ruleForm.acmeId" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 acmeId" v-model="formState.ruleForm.acmeId" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 acmeId" v-model="formState.ruleForm.acmeId" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.acmeId">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.acmeId">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeId" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.acmeId" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="description" prop="description" :rules="{ required: true, message: `请输入 description！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear />
+        <!-- 
+        // 文本
+        {{ description ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.description">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.description">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.description" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.description" allow-half />
+        -->
+    </a-form-model-item>
+</a-form-model>
+*/
+
+//#endregion
+
+//#region DomainInfoDetailOutput 模型
+export class DomainInfoDetailOutput {
+    id?: number;
+    primaryDomain?: string;
+    otherDomains?: string | undefined;
+    acmeId?: number;
+    description?: string | undefined;
+    [key: string]: any;
+}
+
+export const DomainInfoDetailOutputColumns = {
+    Id: { dataIndex: 'id', title: 'id' },
+    PrimaryDomain: { dataIndex: 'primaryDomain', title: 'primaryDomain' },
+    OtherDomains: { dataIndex: 'otherDomains', title: 'otherDomains' },
+    AcmeId: { dataIndex: 'acmeId', title: 'acmeId' },
+    Description: { dataIndex: 'description', title: 'description' },
+};
+
+/* 
+<a-form-model ref="formRef" :model="formState.ruleForm" :labelCol="{ xs: { span: 24 }, sm: { span: 5 } }" :wrapperCol="{ xs: { span: 24 }, sm: { span: 15 } }">
+    <a-form-model-item label="id" prop="id" :rules="{ required: true, message: `请输入 id！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 id" v-model="formState.ruleForm.id" allowClear />
+        <!-- 
+        // 文本
+        {{ id ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 id" v-model="formState.ruleForm.id" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 id" v-model="formState.ruleForm.id" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 id" v-model="formState.ruleForm.id" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.id">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.id">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.id" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.id" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="primaryDomain" prop="primaryDomain" :rules="{ required: true, message: `请输入 primaryDomain！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear />
+        <!-- 
+        // 文本
+        {{ primaryDomain ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.primaryDomain">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.primaryDomain">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.primaryDomain" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.primaryDomain" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="otherDomains" prop="otherDomains" :rules="{ required: true, message: `请输入 otherDomains！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear />
+        <!-- 
+        // 文本
+        {{ otherDomains ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.otherDomains">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.otherDomains">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.otherDomains" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.otherDomains" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="acmeId" prop="acmeId" :rules="{ required: true, message: `请输入 acmeId！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 acmeId" v-model="formState.ruleForm.acmeId" allowClear />
+        <!-- 
+        // 文本
+        {{ acmeId ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 acmeId" v-model="formState.ruleForm.acmeId" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 acmeId" v-model="formState.ruleForm.acmeId" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 acmeId" v-model="formState.ruleForm.acmeId" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.acmeId">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.acmeId">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeId" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.acmeId" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="description" prop="description" :rules="{ required: true, message: `请输入 description！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear />
+        <!-- 
+        // 文本
+        {{ description ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.description">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.description">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.description" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.description" allow-half />
+        -->
+    </a-form-model-item>
+</a-form-model>
+*/
+
+//#endregion
+
+//#region DomainInfoUpdateInput 模型
+export class DomainInfoUpdateInput {
+    id?: number;
+    primaryDomain?: string;
+    otherDomains?: string | undefined;
+    acmeId?: number;
+    description?: string | undefined;
+    [key: string]: any;
+}
+
+export const DomainInfoUpdateInputColumns = {
+    Id: { dataIndex: 'id', title: 'id' },
+    PrimaryDomain: { dataIndex: 'primaryDomain', title: 'primaryDomain' },
+    OtherDomains: { dataIndex: 'otherDomains', title: 'otherDomains' },
+    AcmeId: { dataIndex: 'acmeId', title: 'acmeId' },
+    Description: { dataIndex: 'description', title: 'description' },
+};
+
+/* 
+<a-form-model ref="formRef" :model="formState.ruleForm" :labelCol="{ xs: { span: 24 }, sm: { span: 5 } }" :wrapperCol="{ xs: { span: 24 }, sm: { span: 15 } }">
+    <a-form-model-item label="id" prop="id" :rules="{ required: true, message: `请输入 id！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 id" v-model="formState.ruleForm.id" allowClear />
+        <!-- 
+        // 文本
+        {{ id ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 id" v-model="formState.ruleForm.id" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 id" v-model="formState.ruleForm.id" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 id" v-model="formState.ruleForm.id" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.id">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.id">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.id" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.id" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="primaryDomain" prop="primaryDomain" :rules="{ required: true, message: `请输入 primaryDomain！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear />
+        <!-- 
+        // 文本
+        {{ primaryDomain ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 primaryDomain" v-model="formState.ruleForm.primaryDomain" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.primaryDomain">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.primaryDomain">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.primaryDomain" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.primaryDomain" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="otherDomains" prop="otherDomains" :rules="{ required: true, message: `请输入 otherDomains！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear />
+        <!-- 
+        // 文本
+        {{ otherDomains ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 otherDomains" v-model="formState.ruleForm.otherDomains" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.otherDomains">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.otherDomains">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.otherDomains" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.otherDomains" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="acmeId" prop="acmeId" :rules="{ required: true, message: `请输入 acmeId！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 acmeId" v-model="formState.ruleForm.acmeId" allowClear />
+        <!-- 
+        // 文本
+        {{ acmeId ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 acmeId" v-model="formState.ruleForm.acmeId" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 acmeId" v-model="formState.ruleForm.acmeId" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 acmeId" v-model="formState.ruleForm.acmeId" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.acmeId">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.acmeId">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeId" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.acmeId" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="description" prop="description" :rules="{ required: true, message: `请输入 description！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear />
+        <!-- 
+        // 文本
+        {{ description ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.description">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.description">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.description" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.description" allow-half />
+        -->
+    </a-form-model-item>
+</a-form-model>
+*/
+
+//#endregion
+
+//#region DomainOrderCreateInput 模型
+export class DomainOrderCreateInput {
+    acmeTitle?: string;
+    domains?: string;
+    directoryUri?: string;
+    orderUrl?: string;
+    orderExpires?: Date | undefined;
+    orderStatus?: number | undefined;
+    description?: string | undefined;
+    [key: string]: any;
+}
+
+export const DomainOrderCreateInputColumns = {
+    AcmeTitle: { dataIndex: 'acmeTitle', title: 'acmeTitle' },
+    Domains: { dataIndex: 'domains', title: 'domains' },
+    DirectoryUri: { dataIndex: 'directoryUri', title: 'directoryUri' },
+    OrderUrl: { dataIndex: 'orderUrl', title: 'orderUrl' },
+    OrderExpires: { dataIndex: 'orderExpires', title: 'orderExpires' },
+    OrderStatus: { dataIndex: 'orderStatus', title: 'orderStatus' },
+    Description: { dataIndex: 'description', title: 'description' },
+};
+
+/* 
+<a-form-model ref="formRef" :model="formState.ruleForm" :labelCol="{ xs: { span: 24 }, sm: { span: 5 } }" :wrapperCol="{ xs: { span: 24 }, sm: { span: 15 } }">
+    <a-form-model-item label="acmeTitle" prop="acmeTitle" :rules="{ required: true, message: `请输入 acmeTitle！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear />
+        <!-- 
+        // 文本
+        {{ acmeTitle ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.acmeTitle">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.acmeTitle">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeTitle" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.acmeTitle" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="domains" prop="domains" :rules="{ required: true, message: `请输入 domains！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 domains" v-model="formState.ruleForm.domains" allowClear />
+        <!-- 
+        // 文本
+        {{ domains ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 domains" v-model="formState.ruleForm.domains" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 domains" v-model="formState.ruleForm.domains" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 domains" v-model="formState.ruleForm.domains" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.domains">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.domains">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.domains" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.domains" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="directoryUri" prop="directoryUri" :rules="{ required: true, message: `请输入 directoryUri！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear />
+        <!-- 
+        // 文本
+        {{ directoryUri ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.directoryUri">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.directoryUri">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.directoryUri" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.directoryUri" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="orderUrl" prop="orderUrl" :rules="{ required: true, message: `请输入 orderUrl！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear />
+        <!-- 
+        // 文本
+        {{ orderUrl ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.orderUrl">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.orderUrl">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.orderUrl" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.orderUrl" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="orderExpires" prop="orderExpires" :rules="{ required: true, message: `请输入 orderExpires！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear />
+        <!-- 
+        // 文本
+        {{ orderExpires ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.orderExpires">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.orderExpires">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.orderExpires" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.orderExpires" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="orderStatus" prop="orderStatus" :rules="{ required: true, message: `请输入 orderStatus！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear />
+        <!-- 
+        // 文本
+        {{ orderStatus ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.orderStatus">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.orderStatus">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.orderStatus" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.orderStatus" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="description" prop="description" :rules="{ required: true, message: `请输入 description！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear />
+        <!-- 
+        // 文本
+        {{ description ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.description">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.description">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.description" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.description" allow-half />
+        -->
+    </a-form-model-item>
+</a-form-model>
+*/
+
+//#endregion
+
+//#region DomainOrderDetailOutput 模型
+export class DomainOrderDetailOutput {
+    id?: number;
+    acmeTitle?: string;
+    domains?: string;
+    directoryUri?: string;
+    orderUrl?: string;
+    orderExpires?: Date | undefined;
+    orderStatus?: number | undefined;
+    description?: string | undefined;
+    [key: string]: any;
+}
+
+export const DomainOrderDetailOutputColumns = {
+    Id: { dataIndex: 'id', title: 'id' },
+    AcmeTitle: { dataIndex: 'acmeTitle', title: 'acmeTitle' },
+    Domains: { dataIndex: 'domains', title: 'domains' },
+    DirectoryUri: { dataIndex: 'directoryUri', title: 'directoryUri' },
+    OrderUrl: { dataIndex: 'orderUrl', title: 'orderUrl' },
+    OrderExpires: { dataIndex: 'orderExpires', title: 'orderExpires' },
+    OrderStatus: { dataIndex: 'orderStatus', title: 'orderStatus' },
+    Description: { dataIndex: 'description', title: 'description' },
+};
+
+/* 
+<a-form-model ref="formRef" :model="formState.ruleForm" :labelCol="{ xs: { span: 24 }, sm: { span: 5 } }" :wrapperCol="{ xs: { span: 24 }, sm: { span: 15 } }">
+    <a-form-model-item label="id" prop="id" :rules="{ required: true, message: `请输入 id！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 id" v-model="formState.ruleForm.id" allowClear />
+        <!-- 
+        // 文本
+        {{ id ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 id" v-model="formState.ruleForm.id" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 id" v-model="formState.ruleForm.id" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 id" v-model="formState.ruleForm.id" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.id">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.id">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.id" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.id" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="acmeTitle" prop="acmeTitle" :rules="{ required: true, message: `请输入 acmeTitle！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear />
+        <!-- 
+        // 文本
+        {{ acmeTitle ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.acmeTitle">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.acmeTitle">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeTitle" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.acmeTitle" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="domains" prop="domains" :rules="{ required: true, message: `请输入 domains！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 domains" v-model="formState.ruleForm.domains" allowClear />
+        <!-- 
+        // 文本
+        {{ domains ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 domains" v-model="formState.ruleForm.domains" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 domains" v-model="formState.ruleForm.domains" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 domains" v-model="formState.ruleForm.domains" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.domains">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.domains">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.domains" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.domains" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="directoryUri" prop="directoryUri" :rules="{ required: true, message: `请输入 directoryUri！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear />
+        <!-- 
+        // 文本
+        {{ directoryUri ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.directoryUri">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.directoryUri">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.directoryUri" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.directoryUri" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="orderUrl" prop="orderUrl" :rules="{ required: true, message: `请输入 orderUrl！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear />
+        <!-- 
+        // 文本
+        {{ orderUrl ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.orderUrl">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.orderUrl">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.orderUrl" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.orderUrl" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="orderExpires" prop="orderExpires" :rules="{ required: true, message: `请输入 orderExpires！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear />
+        <!-- 
+        // 文本
+        {{ orderExpires ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.orderExpires">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.orderExpires">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.orderExpires" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.orderExpires" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="orderStatus" prop="orderStatus" :rules="{ required: true, message: `请输入 orderStatus！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear />
+        <!-- 
+        // 文本
+        {{ orderStatus ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.orderStatus">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.orderStatus">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.orderStatus" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.orderStatus" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="description" prop="description" :rules="{ required: true, message: `请输入 description！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear />
+        <!-- 
+        // 文本
+        {{ description ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 description" v-model="formState.ruleForm.description" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 description" v-model="formState.ruleForm.description" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.description">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.description">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.description" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.description" allow-half />
+        -->
+    </a-form-model-item>
+</a-form-model>
+*/
+
+//#endregion
+
+//#region DomainOrderUpdateInput 模型
+export class DomainOrderUpdateInput {
+    id?: number;
+    acmeTitle?: string;
+    domains?: string;
+    directoryUri?: string;
+    orderUrl?: string;
+    orderExpires?: Date | undefined;
+    orderStatus?: number | undefined;
+    description?: string | undefined;
+    [key: string]: any;
+}
+
+export const DomainOrderUpdateInputColumns = {
+    Id: { dataIndex: 'id', title: 'id' },
+    AcmeTitle: { dataIndex: 'acmeTitle', title: 'acmeTitle' },
+    Domains: { dataIndex: 'domains', title: 'domains' },
+    DirectoryUri: { dataIndex: 'directoryUri', title: 'directoryUri' },
+    OrderUrl: { dataIndex: 'orderUrl', title: 'orderUrl' },
+    OrderExpires: { dataIndex: 'orderExpires', title: 'orderExpires' },
+    OrderStatus: { dataIndex: 'orderStatus', title: 'orderStatus' },
+    Description: { dataIndex: 'description', title: 'description' },
+};
+
+/* 
+<a-form-model ref="formRef" :model="formState.ruleForm" :labelCol="{ xs: { span: 24 }, sm: { span: 5 } }" :wrapperCol="{ xs: { span: 24 }, sm: { span: 15 } }">
+    <a-form-model-item label="id" prop="id" :rules="{ required: true, message: `请输入 id！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 id" v-model="formState.ruleForm.id" allowClear />
+        <!-- 
+        // 文本
+        {{ id ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 id" v-model="formState.ruleForm.id" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 id" v-model="formState.ruleForm.id" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 id" v-model="formState.ruleForm.id" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.id">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.id">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.id" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.id" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="acmeTitle" prop="acmeTitle" :rules="{ required: true, message: `请输入 acmeTitle！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear />
+        <!-- 
+        // 文本
+        {{ acmeTitle ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 acmeTitle" v-model="formState.ruleForm.acmeTitle" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.acmeTitle">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.acmeTitle">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.acmeTitle" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.acmeTitle" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="domains" prop="domains" :rules="{ required: true, message: `请输入 domains！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 domains" v-model="formState.ruleForm.domains" allowClear />
+        <!-- 
+        // 文本
+        {{ domains ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 domains" v-model="formState.ruleForm.domains" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 domains" v-model="formState.ruleForm.domains" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 domains" v-model="formState.ruleForm.domains" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.domains">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.domains">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.domains" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.domains" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="directoryUri" prop="directoryUri" :rules="{ required: true, message: `请输入 directoryUri！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear />
+        <!-- 
+        // 文本
+        {{ directoryUri ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 directoryUri" v-model="formState.ruleForm.directoryUri" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.directoryUri">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.directoryUri">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.directoryUri" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.directoryUri" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="orderUrl" prop="orderUrl" :rules="{ required: true, message: `请输入 orderUrl！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear />
+        <!-- 
+        // 文本
+        {{ orderUrl ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 orderUrl" v-model="formState.ruleForm.orderUrl" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.orderUrl">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.orderUrl">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.orderUrl" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.orderUrl" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="orderExpires" prop="orderExpires" :rules="{ required: true, message: `请输入 orderExpires！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear />
+        <!-- 
+        // 文本
+        {{ orderExpires ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 orderExpires" v-model="formState.ruleForm.orderExpires" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.orderExpires">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.orderExpires">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.orderExpires" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.orderExpires" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="orderStatus" prop="orderStatus" :rules="{ required: true, message: `请输入 orderStatus！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear />
+        <!-- 
+        // 文本
+        {{ orderStatus ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 orderStatus" v-model="formState.ruleForm.orderStatus" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.orderStatus">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.orderStatus">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.orderStatus" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.orderStatus" allow-half />
         -->
     </a-form-model-item>
     <a-form-model-item label="description" prop="description" :rules="{ required: true, message: `请输入 description！`, trigger: 'blur' }" has-feedback>
@@ -3886,6 +5919,484 @@ export class SqlSugarPagedListOfDnsInfoDetailOutput {
 }
 
 export const SqlSugarPagedListOfDnsInfoDetailOutputColumns = {
+    Page: { dataIndex: 'page', title: 'page' },
+    PageSize: { dataIndex: 'pageSize', title: 'pageSize' },
+    Total: { dataIndex: 'total', title: 'total' },
+    TotalPages: { dataIndex: 'totalPages', title: 'totalPages' },
+    Items: { dataIndex: 'items', title: 'items' },
+    HasPrevPage: { dataIndex: 'hasPrevPage', title: 'hasPrevPage' },
+    HasNextPage: { dataIndex: 'hasNextPage', title: 'hasNextPage' },
+};
+
+/* 
+<a-form-model ref="formRef" :model="formState.ruleForm" :labelCol="{ xs: { span: 24 }, sm: { span: 5 } }" :wrapperCol="{ xs: { span: 24 }, sm: { span: 15 } }">
+    <a-form-model-item label="page" prop="page" :rules="{ required: true, message: `请输入 page！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 page" v-model="formState.ruleForm.page" allowClear />
+        <!-- 
+        // 文本
+        {{ page ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 page" v-model="formState.ruleForm.page" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 page" v-model="formState.ruleForm.page" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 page" v-model="formState.ruleForm.page" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.page">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.page">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.page" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.page" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="pageSize" prop="pageSize" :rules="{ required: true, message: `请输入 pageSize！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 pageSize" v-model="formState.ruleForm.pageSize" allowClear />
+        <!-- 
+        // 文本
+        {{ pageSize ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 pageSize" v-model="formState.ruleForm.pageSize" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 pageSize" v-model="formState.ruleForm.pageSize" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 pageSize" v-model="formState.ruleForm.pageSize" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.pageSize">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.pageSize">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.pageSize" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.pageSize" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="total" prop="total" :rules="{ required: true, message: `请输入 total！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 total" v-model="formState.ruleForm.total" allowClear />
+        <!-- 
+        // 文本
+        {{ total ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 total" v-model="formState.ruleForm.total" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 total" v-model="formState.ruleForm.total" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 total" v-model="formState.ruleForm.total" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.total">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.total">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.total" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.total" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="totalPages" prop="totalPages" :rules="{ required: true, message: `请输入 totalPages！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 totalPages" v-model="formState.ruleForm.totalPages" allowClear />
+        <!-- 
+        // 文本
+        {{ totalPages ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 totalPages" v-model="formState.ruleForm.totalPages" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 totalPages" v-model="formState.ruleForm.totalPages" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 totalPages" v-model="formState.ruleForm.totalPages" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.totalPages">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.totalPages">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.totalPages" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.totalPages" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="items" prop="items" :rules="{ required: true, message: `请输入 items！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 items" v-model="formState.ruleForm.items" allowClear />
+        <!-- 
+        // 文本
+        {{ items ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 items" v-model="formState.ruleForm.items" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 items" v-model="formState.ruleForm.items" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 items" v-model="formState.ruleForm.items" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.items">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.items">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.items" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.items" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="hasPrevPage" prop="hasPrevPage" :rules="{ required: true, message: `请输入 hasPrevPage！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 hasPrevPage" v-model="formState.ruleForm.hasPrevPage" allowClear />
+        <!-- 
+        // 文本
+        {{ hasPrevPage ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 hasPrevPage" v-model="formState.ruleForm.hasPrevPage" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 hasPrevPage" v-model="formState.ruleForm.hasPrevPage" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 hasPrevPage" v-model="formState.ruleForm.hasPrevPage" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.hasPrevPage">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.hasPrevPage">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.hasPrevPage" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.hasPrevPage" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="hasNextPage" prop="hasNextPage" :rules="{ required: true, message: `请输入 hasNextPage！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 hasNextPage" v-model="formState.ruleForm.hasNextPage" allowClear />
+        <!-- 
+        // 文本
+        {{ hasNextPage ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 hasNextPage" v-model="formState.ruleForm.hasNextPage" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 hasNextPage" v-model="formState.ruleForm.hasNextPage" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 hasNextPage" v-model="formState.ruleForm.hasNextPage" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.hasNextPage">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.hasNextPage">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.hasNextPage" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.hasNextPage" allow-half />
+        -->
+    </a-form-model-item>
+</a-form-model>
+*/
+
+//#endregion
+
+//#region SqlSugarPagedListOfDomainInfoDetailOutput 模型
+export class SqlSugarPagedListOfDomainInfoDetailOutput {
+    page?: number;
+    pageSize?: number;
+    total?: number;
+    totalPages?: number;
+    items?: DomainInfoDetailOutput[];
+    hasPrevPage?: boolean;
+    hasNextPage?: boolean;
+    [key: string]: any;
+}
+
+export const SqlSugarPagedListOfDomainInfoDetailOutputColumns = {
+    Page: { dataIndex: 'page', title: 'page' },
+    PageSize: { dataIndex: 'pageSize', title: 'pageSize' },
+    Total: { dataIndex: 'total', title: 'total' },
+    TotalPages: { dataIndex: 'totalPages', title: 'totalPages' },
+    Items: { dataIndex: 'items', title: 'items' },
+    HasPrevPage: { dataIndex: 'hasPrevPage', title: 'hasPrevPage' },
+    HasNextPage: { dataIndex: 'hasNextPage', title: 'hasNextPage' },
+};
+
+/* 
+<a-form-model ref="formRef" :model="formState.ruleForm" :labelCol="{ xs: { span: 24 }, sm: { span: 5 } }" :wrapperCol="{ xs: { span: 24 }, sm: { span: 15 } }">
+    <a-form-model-item label="page" prop="page" :rules="{ required: true, message: `请输入 page！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 page" v-model="formState.ruleForm.page" allowClear />
+        <!-- 
+        // 文本
+        {{ page ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 page" v-model="formState.ruleForm.page" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 page" v-model="formState.ruleForm.page" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 page" v-model="formState.ruleForm.page" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.page">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.page">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.page" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.page" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="pageSize" prop="pageSize" :rules="{ required: true, message: `请输入 pageSize！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 pageSize" v-model="formState.ruleForm.pageSize" allowClear />
+        <!-- 
+        // 文本
+        {{ pageSize ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 pageSize" v-model="formState.ruleForm.pageSize" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 pageSize" v-model="formState.ruleForm.pageSize" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 pageSize" v-model="formState.ruleForm.pageSize" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.pageSize">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.pageSize">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.pageSize" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.pageSize" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="total" prop="total" :rules="{ required: true, message: `请输入 total！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 total" v-model="formState.ruleForm.total" allowClear />
+        <!-- 
+        // 文本
+        {{ total ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 total" v-model="formState.ruleForm.total" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 total" v-model="formState.ruleForm.total" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 total" v-model="formState.ruleForm.total" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.total">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.total">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.total" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.total" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="totalPages" prop="totalPages" :rules="{ required: true, message: `请输入 totalPages！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 totalPages" v-model="formState.ruleForm.totalPages" allowClear />
+        <!-- 
+        // 文本
+        {{ totalPages ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 totalPages" v-model="formState.ruleForm.totalPages" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 totalPages" v-model="formState.ruleForm.totalPages" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 totalPages" v-model="formState.ruleForm.totalPages" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.totalPages">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.totalPages">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.totalPages" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.totalPages" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="items" prop="items" :rules="{ required: true, message: `请输入 items！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 items" v-model="formState.ruleForm.items" allowClear />
+        <!-- 
+        // 文本
+        {{ items ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 items" v-model="formState.ruleForm.items" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 items" v-model="formState.ruleForm.items" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 items" v-model="formState.ruleForm.items" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.items">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.items">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.items" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.items" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="hasPrevPage" prop="hasPrevPage" :rules="{ required: true, message: `请输入 hasPrevPage！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 hasPrevPage" v-model="formState.ruleForm.hasPrevPage" allowClear />
+        <!-- 
+        // 文本
+        {{ hasPrevPage ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 hasPrevPage" v-model="formState.ruleForm.hasPrevPage" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 hasPrevPage" v-model="formState.ruleForm.hasPrevPage" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 hasPrevPage" v-model="formState.ruleForm.hasPrevPage" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.hasPrevPage">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.hasPrevPage">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.hasPrevPage" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.hasPrevPage" allow-half />
+        -->
+    </a-form-model-item>
+    <a-form-model-item label="hasNextPage" prop="hasNextPage" :rules="{ required: true, message: `请输入 hasNextPage！`, trigger: 'blur' }" has-feedback>
+        <a-input placeholder="请输入 hasNextPage" v-model="formState.ruleForm.hasNextPage" allowClear />
+        <!-- 
+        // 文本
+        {{ hasNextPage ?? "-" }}
+        // 文本域
+        <a-textarea placeholder="请输入 hasNextPage" v-model="formState.ruleForm.hasNextPage" allowClear show-count :rows="4" />
+        // 日期选择框
+        <a-date-picker placeholder="请选择 hasNextPage" v-model="formState.ruleForm.hasNextPage" allowClear style="width: 100%;" />
+        // 下拉选择框
+        <a-select placeholder="请选择 hasNextPage" v-model="formState.ruleForm.hasNextPage" allowClear>
+            <a-select-option value="A" key="A">test</a-select-option>
+            <a-select-option value="B" key="B">test</a-select-option>
+        </a-select>
+        // 单选框
+        <a-radio-group v-model="formState.ruleForm.hasNextPage">
+            <a-radio-button value="A">A</a-radio-button>
+            <a-radio-button value="B">B</a-radio-button>
+        </a-radio-group>
+        // 复选框
+        <a-checkbox-group v-model="formState.ruleForm.hasNextPage">
+            <a-checkbox value="A">A</a-checkbox>
+            <a-checkbox value="B">B</a-checkbox>
+        </a-checkbox-group>
+        // 开关
+        <a-switch checked-children="开" un-checked-children="关" v-model="formState.ruleForm.hasNextPage" />
+        // 评分
+        <a-rate v-model="formState.ruleForm.hasNextPage" allow-half />
+        -->
+    </a-form-model-item>
+</a-form-model>
+*/
+
+//#endregion
+
+//#region SqlSugarPagedListOfDomainOrderDetailOutput 模型
+export class SqlSugarPagedListOfDomainOrderDetailOutput {
+    page?: number;
+    pageSize?: number;
+    total?: number;
+    totalPages?: number;
+    items?: DomainOrderDetailOutput[];
+    hasPrevPage?: boolean;
+    hasNextPage?: boolean;
+    [key: string]: any;
+}
+
+export const SqlSugarPagedListOfDomainOrderDetailOutputColumns = {
     Page: { dataIndex: 'page', title: 'page' },
     PageSize: { dataIndex: 'pageSize', title: 'pageSize' },
     Total: { dataIndex: 'total', title: 'total' },

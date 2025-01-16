@@ -1,6 +1,10 @@
 <template>
   <el-dialog v-model="state.isShowDialog" destroy-on-close draggable title="Acme 账户" width="500">
     <el-form label-width="auto" :model="state.form" ref="accountFormRef">
+      <el-form-item label="备注" required prop="description"
+        :rules="[{ required: true, message: '备注 不能为空', trigger: 'blur' }]">
+        <el-input v-model="state.form.description" placeholder="请填写 备注" clearable />
+      </el-form-item>
       <el-form-item label="证书颁发机构" required prop="acmeId"
         :rules="[{ required: true, message: '证书颁发机构不能为空', trigger: 'change' }]">
         <el-select v-model="state.form.acmeId" placeholder="请选择 证书颁发机构" clearable>
@@ -82,6 +86,7 @@ const submit = () => {
   accountFormRef.value.validate(async (valid: boolean) => {
     if (!valid) return;
     state.form.directoryUri = state.acmeList?.find(x => x.id == state.form.acmeId)?.productionAPIEndpoint;
+    state.form.acmeTitle = state.acmeList?.find(x => x.id == state.form.acmeId)?.title;
     if (state.form?.id ?? 0 > 0) {
       await client.ApiAcmeInfoUpdate(state.form);
     } else {

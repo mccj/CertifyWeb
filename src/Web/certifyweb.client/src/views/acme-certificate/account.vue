@@ -3,9 +3,9 @@
     <el-button type="primary" @click="openAddAccount"> 新增 </el-button>
     <el-table :data="state.data" style="width: 100%" v-loading="state.loading" border>
       <el-table-column type="index" label="序号" width="55" align="center" fixed />
-      <el-table-column prop="acmeId" label="acme" align="center" show-overflow-tooltip />
+      <el-table-column prop="acmeTitle" label="acme" align="center" show-overflow-tooltip />
       <el-table-column prop="email" label="邮箱" align="center" show-overflow-tooltip />
-      <el-table-column prop="name" label="描述" align="center" show-overflow-tooltip />
+      <el-table-column prop="description" label="描述" align="center" show-overflow-tooltip />
       <el-table-column label="操作" width="240" fixed="right" align="center" show-overflow-tooltip>
         <template #default="scope">
           <el-button size="small" text type="primary" @click="openEditAccount(scope.row)"> 编辑 </el-button>
