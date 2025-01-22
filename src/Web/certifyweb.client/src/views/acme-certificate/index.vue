@@ -6,14 +6,25 @@
             <el-table-column prop="acmeTitle" label="证书颁发机构" align="center" show-overflow-tooltip />
             <el-table-column prop="domains" label="域名" align="center" show-overflow-tooltip />
             <el-table-column prop="orderExpires" label="有效期" align="center" show-overflow-tooltip />
-            <el-table-column prop="orderStatus" label="状态" align="center" show-overflow-tooltip />
+            <el-table-column prop="orderStatus" label="状态" align="center" show-overflow-tooltip>
+                <template #default="scope">
+                    <el-tag type="success" v-if="scope.row.orderStatus === 'valid'">已签发</el-tag>
+                    <el-tag type="primary" v-else-if="scope.row.orderStatus === 'pending'">待申请</el-tag>
+                    <el-tag type="info" v-else>{{ scope.row.orderStatus }}</el-tag>
+
+                </template>
+            </el-table-column>
             <el-table-column prop="description" label="描述" align="center" show-overflow-tooltip />
             <el-table-column label="操作" width="240" fixed="right" align="center" show-overflow-tooltip>
                 <template #default="scope">
-                    <el-button size="small" text @click="editRequestDomainRef?.openDialog(scope.row)">申请新证书</el-button>
-                    <el-button size="small" text @click="editCertificateInfoRef?.openDialog(scope.row)">下载证书</el-button>
-                    <!-- <el-button size="small" text type="primary" @click="openEditDns(scope.row)"> 编辑 </el-button> -->
-                    <el-button size="small" text type="danger" @click="delDns(scope.row)"> 删除 </el-button>
+                    <el-button v-if="scope.row.orderStatus !== 'valid'" size="small" text
+                        @click="editRequestDomainRef?.openDialog(scope.row)">申请新证书</el-button>
+                    <el-button v-if="scope.row.orderStatus === 'valid'" size="small" text
+                        @click="editCertificateInfoRef?.openDialog(scope.row)">下载证书</el-button>
+                    <!-- <el-button v-if="scope.row.orderStatus === 'valid'" size="small" text type="danger"
+                        @click="revokeCert(scope.row)"> 吊销证书 </el-button> -->
+                    <el-button v-if="scope.row.orderStatus !== 'valid'" size="small" text type="danger"
+                        @click="delDns(scope.row)"> 删除 </el-button>
                 </template>
             </el-table-column>
 
@@ -78,10 +89,24 @@ const openAddDomainOrder = () => {
 const openEditDns = async (row: unknown) => {
     domainOrderAddRef.value?.openDialog(row);
 };
+// 吊销证书
+const revokeCert = (row: DomainOrderDetailOutput) => {
+    ElMessageBox.confirm(`确定吊销证书吗：【${row.domains}】?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+    })
+        .then(async () => {
+            await client.ApiRequestDomainRevokeCert(row.id);
+            await handleQuery();
+            ElMessage.success('删除成功');
+        })
+        .catch(() => { });
+};
 
 // 删除
 const delDns = (row: DomainOrderDetailOutput) => {
-    ElMessageBox.confirm(`确定删记录：【${row.email}】?`, '提示', {
+    ElMessageBox.confirm(`确定删记录：【${row.domains}】?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

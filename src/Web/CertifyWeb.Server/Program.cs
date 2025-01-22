@@ -1,5 +1,4 @@
 using MapsterMapper;
-using Scalar.AspNetCore;
 using SqlSugar;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,9 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-
+//builder.Services.AddOpenApi();
+builder.Services.AddOpenApiDocument(); // add OpenAPI v3 document
 
 builder.Services.AddHttpContextAccessor();
 
@@ -32,14 +30,18 @@ app.MapStaticAssets();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    // /scalar/v1
-    app.MapScalarApiReference();
-    // /swagger
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/openapi/v1.json", "v1");
-    });
+    //app.MapOpenApi();
+    //// /scalar/v1
+    //app.MapScalarApiReference();
+    //// /swagger
+    //app.UseSwaggerUI(options =>
+    //{
+    //    options.SwaggerEndpoint("/openapi/v1.json", "v1");
+    //});
+
+    app.UseOpenApi(); // serve OpenAPI/Swagger documents
+    app.UseSwaggerUi(); // serve Swagger UI
+    //app.UseReDoc(); // serve ReDoc UI
 }
 
 app.UseAuthorization();

@@ -84,15 +84,18 @@ namespace CertifyWeb.Server.Controllers
             var authz = await order.Authorizations();
             var result = authz.Select(f =>
             {
+                var resource = f.Resource().Result;
                 var dnsAuthz = f.Dns().Result;
+                var httpAuthz = f.Http().Result;
+                var tlsAlpnAuthz = f.TlsAlpn().Result;
                 return new
                 {
                     DirectoryUri = domainOrderRecord.DirectoryUri,
                     AuthUrl = f.Location,
-                    Resource = f.Resource().Result,
+                    Resource = new { resource.Expires, resource.Identifier, resource.Status, resource.Wildcard },
                     DnsAuthz = new { dnsAuthz.Location, dnsAuthz.KeyAuthz, dnsAuthz.Token, dnsAuthz.Type, dnsAuthz.RetryAfter, DnsTxt = acme.AccountKey.DnsTxt(dnsAuthz.Token) },
-                    //HttpAuthz = (f.Http().Result),
-                    //TlsAlpnAuthz = (f.TlsAlpn().Result)
+                    HttpAuthz = httpAuthz,
+                    TlsAlpnAuthz = tlsAlpnAuthz
                 };
             }).ToArray();
             return result;
@@ -105,11 +108,13 @@ namespace CertifyWeb.Server.Controllers
         {
             var acme = new AcmeContext(new Uri(directoryUri), PluginManager.PemKey, badNonceRetryCount: 10);
             var authz = acme.Authorization(new Uri(authUrl));
-            //var ssss = await authz.Challenges();
+            var ssss = await authz.Challenges();
             //var sssdd = ssss.FirstOrDefault().Resource();
             //var sss = await authz.Deactivate();
 
             var sfs = await authz.Dns();
+            var sfs1 = await authz.TlsAlpn();
+            var sfs2 = await authz.Http();
 
             var dsfsf = await sfs.Validate();
 
@@ -131,10 +136,16 @@ namespace CertifyWeb.Server.Controllers
 
             var order = acme.Order(new Uri(domainOrderRecord.OrderUrl));
 
-            var privateKey = KeyFactory.NewKey(KeyAlgorithm.ES256);
+            var privateKey = KeyFactory.NewKey(KeyAlgorithm.ES256, 2048);
             var cert = await order.Generate(new CsrInfo
             {
-                CommonName = domainOrderRecord.Domains
+                CountryName = "CN",//国家
+                Locality = "Ningbo",//城市
+                State = "Zhejiang",//省
+                Organization = "软云智联",//企业
+                OrganizationUnit = "研发",//部门
+                //RequireOcspMustStaple = false,
+                CommonName = domainOrderRecord.Domains//证书拥有者名
             }, privateKey);
 
             var orderResource = await order.Resource();
@@ -164,38 +175,55 @@ namespace CertifyWeb.Server.Controllers
 
             //var dfds = await order.Finalize(csr.Generate());
 
-            var certChain = await order.Download();
-            var cert11 = X509CertificateLoader.LoadCertificate(certChain.Certificate.ToDer());
-            var certFriendlyName = $"[Certify] {cert11.GetEffectiveDateString()} to {cert11.GetExpirationDateString()}";
+
             //var certChain = await order.Finalize();
             //var certPem11 = certChain.ToPem();
             //var certPem12 = certChain.Certificate.ToPem();
 
         }
         /// <summary>
-        /// 
+        /// 吊销证书
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="certFormat"></param>
-        /// <param name="serverType"></param>
         /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        [HttpGet]
-        public async Task<FileResult> DownloadCertFileAsync(long id, string certFormat, string serverType)
+        [HttpPost]
+        public async Task RevokeCertAsync(long id)
         {
             var domainOrderRecord = _domainOrderRepository.GetById(id);
-            if (domainOrderRecord == null) throw new Exception("证书不存在");
 
             var privateKey = KeyFactory.FromPem(domainOrderRecord.PrivateKey);
             var certChain = new CertificateChain(domainOrderRecord.Certificate);
 
+            var acme = new AcmeContext(new Uri(domainOrderRecord.DirectoryUri), PluginManager.PemKey, badNonceRetryCount: 10);
+            //吊销证书
+            try
+            {
+                await acme.RevokeCertificate(certChain.Certificate.ToDer(), Certify.ACME.Anvil.Acme.Resource.RevocationReason.KeyCompromise, privateKey);
+            }
+            catch (Exception)
+            {
+            }
 
+            var order = acme.Order(new Uri(domainOrderRecord.OrderUrl));
+            var orderResource = await order.Resource();
 
-            var certificate = X509CertificateLoader.LoadCertificate(certChain.Certificate.ToDer());
+            domainOrderRecord.OrderStatus = orderResource.Status;
 
+            await _domainOrderRepository.UpdateAsync(domainOrderRecord);
+        }
+        [HttpGet]
+        public async Task<object> GetCertInfoAsync(long id)
+        {
+            var domainOrderRecord = await _domainOrderRepository.GetByIdAsync(id);
+            if (domainOrderRecord == null) throw new Exception("证书不存在");
+
+            var certificate = X509Certificate2.CreateFromPem(domainOrderRecord.Certificate);
+            //var certificate = X509CertificateLoader.LoadCertificate(certChain.Certificate.ToDer());
+            //var certificate = X509Certificate2.CreateFromPem(domainOrderRecord.Certificate, domainOrderRecord.PrivateKey);
             //var ss = RsaKeysFormatExtensions.PemPublicKeyToXml(domainOrderRecord.PrivateKey);
             //var cert2 = X509CertificateLoader.LoadPkcs12(certChain.Certificate.ToDer(), "123456");
-            //var sss = certificate.Export(X509ContentType.Cert, "1111");
+            //var sss1 = certificate.Export(X509ContentType.Cert, "1111");
+            //var sss2 = certificate.Export(X509ContentType.Pkcs12, "1111");
 
             //var rsa = RSA.Create();
 
@@ -227,12 +255,57 @@ namespace CertifyWeb.Server.Controllers
             //}
             //var sddd = certificate.CopyWithPrivateKey(rsa);
 
+            return new
+            {
+                certificate.Version,
+                certificate.Thumbprint,
+                //SubjectName = certificate.SubjectName.Name,
+                certificate.Subject,
+                certificate.SerialNumber,
+                certificate.NotBefore,
+                certificate.NotAfter,
+                //IssuerName = certificate.IssuerName.Name,
+                certificate.Issuer,
+                certificate.Handle,
+                certificate.FriendlyName,
+                certificate.Archived,
+                CertHash = certificate.GetCertHashString(),
+                CertFormat = certificate.GetFormat(),
+                //ECDiffieHellmanPrivateKey = certificate.GetECDiffieHellmanPrivateKey(),
+                //ECDiffieHellmanPublicKey = certificate.GetECDiffieHellmanPublicKey(),
+                EffectiveDate = certificate.GetEffectiveDateString(),
+                ExpirationDate = certificate.GetExpirationDateString(),
+                KeyAlgorithm = certificate.GetKeyAlgorithm(),
+                KeyAlgorithmParameters = certificate.GetKeyAlgorithmParametersString(),
+                PublicKey = certificate.GetPublicKeyString(),
+                PrivateKeyAlgorithm = KeyFactory.FromPem(domainOrderRecord.PrivateKey).Algorithm.ToString(),
+                //RawCertData = certificate.GetRawCertDataString(),
+                //SerialNumber1 = certificate.GetSerialNumberString(),
+            };
+        }
+        /// <summary>
+        /// 下载证书
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="certFormat"></param>
+        /// <param name="serverType"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        [HttpGet]
+        public async Task<FileResult> DownloadCertFileAsync(long id, string certFormat, string serverType)
+        {
+            var domainOrderRecord = await _domainOrderRepository.GetByIdAsync(id);
+            if (domainOrderRecord == null) throw new Exception("证书不存在");
+
+            var privateKey = KeyFactory.FromPem(domainOrderRecord.PrivateKey);
+            var certChain = new CertificateChain(domainOrderRecord.Certificate);
+
 
             var primaryDomain = "www.cluster.ink";
             var fileDownloadName = $"{primaryDomain}_{serverType.ToLower()}.zip";
             if (certFormat == "pfx")
             {
-                var certFriendlyName = "xxxxx";
+                var certFriendlyName = primaryDomain;
                 var password = GenerateRandomPassword(8);
                 var pfx = certChain.ToPfx(privateKey);
                 var pfxBytes = pfx.Build(certFriendlyName, password, false);//pfx文件
@@ -268,6 +341,12 @@ namespace CertifyWeb.Server.Controllers
                 }, fileDownloadName);
             }
         }
+        /// <summary>
+        /// 创建压缩包
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="fileDownloadName"></param>
+        /// <returns></returns>
         private static FileResult GenerateZipFile(Action<ZipArchive> action, string fileDownloadName)
         {
             // 创建一个内存流来存储ZIP内容
@@ -284,6 +363,11 @@ namespace CertifyWeb.Server.Controllers
                 return new FileContentResult(memoryStream.ToArray(), "application/zip") { FileDownloadName = fileDownloadName };
             }
         }
+        /// <summary>
+        /// 创建随机密码
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
         private static string GenerateRandomPassword(int length)
         {
             const string validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";

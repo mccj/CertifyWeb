@@ -2,7 +2,7 @@
   "runtime": "Net80",
   "documentGenerator": {
     "fromDocument": {
-      "url": "http://localhost:5032/openapi/v1.json"
+      "url": "http://localhost:5032/swagger/v1/swagger.json"
       //"url": "swagger.json"
     }
   },
