@@ -31,7 +31,7 @@ namespace CertifyWeb.Server.Controllers
         public async Task<ChallengeProviderDefinition[]> GetChallengeProviders()
         {
             var challengeAPIProviders = await PluginManager.GetChallengeAPIProviders();
-            return challengeAPIProviders.ToArray();
+            return challengeAPIProviders;
         }
 
         /// <summary>

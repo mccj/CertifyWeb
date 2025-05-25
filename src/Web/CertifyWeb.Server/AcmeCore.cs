@@ -25,9 +25,9 @@ namespace TestProject1
             RzzSLxhiQGbGr3tGfS5PIFtALSRW2pWipA==
             -----END EC PRIVATE KEY-----
             ");
-        public static async Task<List<ChallengeProviderDefinition>> GetChallengeAPIProviders()
+        public static async Task<ChallengeProviderDefinition[]> GetChallengeAPIProviders()
         {
-            var result = PluginManager.CurrentInstance.DnsProviderProviders.SelectMany(pp => pp.GetProviders(pp.GetType())).ToList();
+            var result = PluginManager.CurrentInstance.DnsProviderProviders.SelectMany(pp => pp.GetProviders(pp.GetType())).OrderBy(f => f.Title).ToArray();
             return await Task.FromResult(result);
         }
         public static async Task<IDnsProvider> GetDnsProvider(string providerType, Dictionary<string, string> credentials, Dictionary<string, string> parameters, ILog log = null)
@@ -138,9 +138,9 @@ namespace TestProject1
             //var builtInProvider = new BuiltinDnsProviderProvider();//(IDnsProviderProviderPlugin)Activator.CreateInstance(Type.GetType("Certify.Core.Management.Challenges.ChallengeProviders+BuiltinDnsProviderProvider, Certify.Core"));
             //DnsProviderProviders.Add(builtInProvider);
 
-            ////var poshAcmeProvider = (IDnsProviderProviderPlugin)Activator.CreateInstance(Type.GetType("Certify.Core.Management.Challenges.DNS.DnsProviderPoshACME+PoshACMEDnsProviderProvider, Certify.Shared.Extensions"));
-            //var poshAcmeProvider = new Certify.Core.Management.Challenges.DNS.DnsProviderPoshACME.PoshACMEDnsProviderProvider();
-            //DnsProviderProviders.Add(poshAcmeProvider);
+            //var poshAcmeProvider = (IDnsProviderProviderPlugin)Activator.CreateInstance(Type.GetType("Certify.Core.Management.Challenges.DNS.DnsProviderPoshACME+PoshACMEDnsProviderProvider, Certify.Shared.Extensions"));
+            var poshAcmeProvider = new Certify.Core.Management.Challenges.DNS.DnsProviderPoshACME.PoshACMEDnsProviderProvider();
+            DnsProviderProviders.Add(poshAcmeProvider);
 
             var otherProviders = LoadPlugins<IDnsProviderProviderPlugin>("Plugin.DNS.*.dll", usePluginSubfolder: usePluginSubfolder);
             DnsProviderProviders.AddRange(otherProviders);
