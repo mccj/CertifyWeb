@@ -9,13 +9,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Webprofusion.Certify.ACME.Anvil" Version="3.3.2" />
 
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\Certify.Locales\Certify.Locales.csproj" />
 		<ProjectReference Include="..\..\..\Certify.Models\Certify.Models.csproj" />
 		<!--<ProjectReference Include="..\..\..\..\..\libs\anvil\src\Certify.ACME.Anvil\Certify.ACME.Anvil.csproj" />-->
 		<!--<ProjectReference Include="..\..\..\Certify.Shared\Certify.Shared.Core.csproj" />-->
